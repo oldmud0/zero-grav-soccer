@@ -1,7 +1,5 @@
 import pygame
 
-from main import frame_time
-
 class Entity(pygame.sprite.Sprite):
 	def __init__(self, path, surface):
 		pygame.sprite.Sprite.__init__(self)
@@ -14,6 +12,8 @@ class Entity(pygame.sprite.Sprite):
 		
 		self.rect = self.image.get_rect()
 		
+		self.x = 0
+		self.y = 0
 		self.rot = 0
 		
 		self.vx = 0
@@ -30,14 +30,14 @@ class Entity(pygame.sprite.Sprite):
 		self.move()
 	
 	def move(self):
-		x = self.rect.center[0]
-		y = self.rect.center[1]
-		
-		ideal_frame_time = 1/60 # 1 / (60 FPS)
+		from main import frame_time
+		ideal_frame_time = 60 # FPS
 		displacement_factor = frame_time / ideal_frame_time
 		
-		self.rect.center = (x + self.vx * displacement_factor, y + self.vy * displacement_factor)
+		self.x += self.vx * displacement_factor
+		self.y += self.vy * displacement_factor
+		
+		self.rect.center = (round(self.x), round(self.y))
 		
 		self.rot = (self.rot + self.vrot) % 360
 		self.rot_center()
-		print(self.vx, self.vy)

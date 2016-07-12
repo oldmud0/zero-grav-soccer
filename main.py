@@ -1,7 +1,5 @@
 import pygame
 
-from player_ship import PlayerShip
-from camera import Camera
 from constants import DISP_WIDTH, DISP_HEIGHT
 
 game_disp = None
@@ -26,10 +24,12 @@ def init():
 	pygame.display.set_caption("Soccer in space!")
 	game_clock = pygame.time.Clock()
 	
+	from player_ship import PlayerShip
 	ship = PlayerShip(game_disp, 0)
 	objects.add(ship)
 	object_in_control = ship
 	
+	from camera import Camera
 	camera = Camera(1280, 720) # This should be the size of the map.
 	
 	loop()
@@ -52,7 +52,8 @@ def loop():
 			game_disp.blit(object.image, camera.apply(object))
 		
 		pygame.display.update()
-		frame_delta = game_clock.tick(60)
+		global frame_time
+		frame_time = game_clock.tick(60)
 	quit()
 
 def quit():
