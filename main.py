@@ -6,6 +6,7 @@ from constants import DISP_WIDTH, DISP_HEIGHT
 
 game_disp = None
 game_clock = None
+frame_time = 0
 
 stop = False
 
@@ -51,7 +52,7 @@ def loop():
 			game_disp.blit(object.image, camera.apply(object))
 		
 		pygame.display.update()
-		game_clock.tick(60)
+		frame_delta = game_clock.tick(60)
 	quit()
 
 def quit():

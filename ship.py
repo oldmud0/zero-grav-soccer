@@ -21,8 +21,8 @@ class Ship(Entity):
 	
 	def action(self):
 		if self.thrust:
-			self.vx += -.1*math.cos(math.radians(self.rot))
-			self.vy += -.1*math.sin(math.radians(self.rot))
+			self.vx += -.1*math.sin(math.radians(self.rot))
+			self.vy += -.1*math.cos(math.radians(self.rot))
 		if self.left:
 			self.rot += 2
 		if self.right:
