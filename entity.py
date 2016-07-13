@@ -6,7 +6,7 @@ class Entity(pygame.sprite.Sprite):
 		
 		self.surface = surface
 		
-		print("Loading", path)
+		print("Loading", path) # Debugging purposes only
 		self.image = pygame.image.load(path).convert_alpha()
 		self.original_image = self.image
 		
@@ -21,6 +21,10 @@ class Entity(pygame.sprite.Sprite):
 		self.vrot = 0
 	
 	def rot_center(self):
+		"""Rotate the entity's sprite while preserving the center.
+		This is done by taking the original sprite's center, rotating the sprite,
+		and then giving the rotated sprite the old center.
+		"""
 		loc = self.rect.center
 		self.image = pygame.transform.rotate(self.original_image, self.rot)
 		self.rect = self.image.get_rect()
@@ -37,6 +41,7 @@ class Entity(pygame.sprite.Sprite):
 		self.x += self.vx * displacement_factor
 		self.y += self.vy * displacement_factor
 		
+		# If we do not round our floats, pygame will floor it for us (bad)
 		self.rect.center = (round(self.x), round(self.y))
 		
 		self.rot = (self.rot + self.vrot) % 360

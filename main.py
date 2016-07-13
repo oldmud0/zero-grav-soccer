@@ -15,6 +15,7 @@ scene = None
 camera = None
 
 def init():
+	"""Initialize pygame and all objects/variables needed to begin the game."""
 	global game_disp, game_clock, object_in_control, camera
 	
 	pygame.init()
@@ -35,6 +36,7 @@ def init():
 	loop()
 
 def pollEvents():
+	"""Process all (key) events passed to pygame."""
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
 			global stop
@@ -43,10 +45,12 @@ def pollEvents():
 			object_in_control.handleInputs(event)
 		
 def loop():
+	"""Primary game loop."""
 	while not stop:
 		pollEvents();
 		game_disp.fill((0xff, 0xff, 0xff))
 		
+		# Render and update all objects
 		for object in objects:
 			object.action()
 			game_disp.blit(object.image, camera.apply(object))
@@ -59,4 +63,4 @@ def loop():
 def quit():
 	pygame.quit()
 
-init()
+init() # Game starts here.

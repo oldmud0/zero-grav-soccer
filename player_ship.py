@@ -2,6 +2,8 @@ import pygame
 from ship import Ship
 
 class PlayerShip(Ship):
+	"""A player-controllable version of the Ship."""
+	
 	def __init__(self, surface, team):
 		super(PlayerShip, self).__init__(surface, team)
 	
