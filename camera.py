@@ -16,7 +16,7 @@ class Camera:
 		return target.rect.move(self.rect.topleft)
 	
 	def update(self, target):
-		self.rect = self.follow(self.rect, target.rect)
+		self.rect = self.follow(target.rect)
 		
 	def follow(self, target):
 		l, t, _, _ = target # Left and top of target's rectangle/sprite

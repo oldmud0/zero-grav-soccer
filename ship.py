@@ -19,7 +19,7 @@ class Ship(Entity):
 		self.right = False
 		self.grabbing = False
 	
-	def action(self):
+	def action(self, delta):
 		if self.thrust:
 			self.vx += -.1*math.sin(math.radians(self.rot))
 			self.vy += -.1*math.cos(math.radians(self.rot))
@@ -30,4 +30,4 @@ class Ship(Entity):
 		if self.grabbing:
 			pass
 		
-		self.move()
+		self.move(delta)

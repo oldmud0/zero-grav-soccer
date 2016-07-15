@@ -1,4 +1,4 @@
 """Game constants to tweak portions of the game"""
 
-DISP_WIDTH = 1280
-DISP_HEIGHT = 720
+DISP_WIDTH = 640
+DISP_HEIGHT = 480

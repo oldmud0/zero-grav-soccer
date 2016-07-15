@@ -30,14 +30,13 @@ class Entity(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.center = loc
 	
-	def action(self):
+	def action(self, delta):
 		self.move()
 	
-	def move(self):
-		from main import frame_time
+	def move(self, delta):
 		ideal_frame_time = 60 # FPS
-		displacement_factor = frame_time / ideal_frame_time
-		
+		displacement_factor = delta / ideal_frame_time
+				
 		self.x += self.vx * displacement_factor
 		self.y += self.vy * displacement_factor
 		
