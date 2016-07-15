@@ -1,32 +1,33 @@
 import pygame
 
-from constants import DISP_WIDTH, DISP_HEIGHT
+from settings import DISP_WIDTH, DISP_HEIGHT
 
 class Camera:
 	"""The Camera tracks the object being controlled while remaining within
 	the bounds of the level/scene.
 	
-	Thanks to the good friends at Stack Overflow: http://stackoverflow.com/q/22872524
+	Thanks to the good friends at Stack Overflow: http://stackoverflow.com/a/14357169/2958458
 	"""
 	
 	def __init__(self, width, height):
 		self.rect = pygame.Rect(0, 0, width, height)
 	
 	def apply(self, target):
+		"""Apply the position transformations to an entity/sprite."""
 		return target.rect.move(self.rect.topleft)
 	
 	def update(self, target):
-		self.rect = self.follow(target.rect)
+		self.rect = self.follow(target.rect.center)
 		
 	def follow(self, target):
-		l, t, _, _ = target # Left and top of target's rectangle/sprite
+		x, y = target # Center X and Y of target's rectangle/sprite
 		_, _, w, h = self.rect # Width and height of our level
-		l, t       = DISP_WIDTH/2 - l, DISP_HEIGHT/2 - t # Center to target
+		x, y, _, _ = DISP_WIDTH/2 - x, DISP_HEIGHT/2 - y, w, h # Center to target
 		
 		# Clamp the rectangle's boundaries to the level's boundaries
-		l = min(0, l)
-		l = max(DISP_WIDTH - w, l)
-		t = max(DISP_HEIGHT - l, t)
-		t = min(0, t)
+		x = min(0, x)
+		x = max(DISP_WIDTH - w, x)
+		y = max(DISP_HEIGHT - h, y)
+		y = min(0, y)
 		
-		return pygame.Rect(l, t, w, h)
+		return pygame.Rect(x, y, w, h)

@@ -1,6 +1,9 @@
-import pygame
+import pygame, os
 
-from constants import DISP_WIDTH, DISP_HEIGHT
+from entity import Entity
+from map import Map
+
+from settings import DISP_WIDTH, DISP_HEIGHT
 
 game_disp = None
 game_clock = None
@@ -9,13 +12,9 @@ stop = False
 
 objects = pygame.sprite.Group()
 
-object_in_control = None
-scene = None
-camera = None
-
 def init():
 	"""Initialize pygame and all objects/variables needed to begin the game."""
-	global game_disp, game_clock, object_in_control, camera, scene
+	global game_disp, game_clock, camera
 	
 	pygame.init()
 	
@@ -24,16 +23,20 @@ def init():
 	pygame.display.set_caption("Soccer in space!")
 	game_clock = pygame.time.Clock()
 	
+	# Create the map
+	map_path = os.path.join("res", "le_football_small.png")
+	Map.current_map = Map(map_path, game_disp)
+	
+	# Create the ship
 	from player_ship import PlayerShip
 	ship = PlayerShip(game_disp, 0)
 	objects.add(ship)
-	object_in_control = ship
-	
-	from map import Map
-	scene = Map("res/le_football_small.png", game_disp)
+	Entity.ent_in_control = ship
 	
 	from camera import Camera
-	camera = Camera(scene.rect.w, scene.rect.h) # This should be the size of the map.
+	camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h) # This should be the size of the map.
+	
+	print(" -- Finished initializing --")
 	
 	loop()
 
@@ -46,7 +49,7 @@ def pollEvents():
 		elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
 			if event.key == pygame.K_ESCAPE:
 				stop = True
-			object_in_control.handleInputs(event)
+			Entity.ent_in_control.handleInputs(event)
 		
 def loop():
 	"""Primary game loop."""
@@ -56,14 +59,14 @@ def loop():
 		pollEvents();
 		game_disp.fill((0xff, 0xff, 0xff))
 		
-		game_disp.blit(scene.image, camera.apply(scene))
+		game_disp.blit(Map.current_map.image, camera.apply(Map.current_map))
 		
 		# Render and update all objects
 		for object in objects:
 			object.action(delta)
 			game_disp.blit(object.image, camera.apply(object))
 		
-		camera.update(object_in_control)
+		camera.update(Entity.ent_in_control)
 		
 		pygame.display.update()
 	quit()

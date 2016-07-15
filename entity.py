@@ -1,6 +1,8 @@
 import pygame
 
 class Entity(pygame.sprite.Sprite):
+	ent_in_control = None
+
 	def __init__(self, path, surface):
 		pygame.sprite.Sprite.__init__(self)
 		
