@@ -37,3 +37,4 @@ class Ship(Entity):
 			pass
 		
 		self.move(delta)
+		self.collision_detect()

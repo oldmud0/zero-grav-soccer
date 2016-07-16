@@ -24,7 +24,7 @@ def init():
 	game_clock = pygame.time.Clock()
 	
 	# Create the map
-	map_path = os.path.join("res", "le_football_small.png")
+	map_path = os.path.join("res", "le_football.png")
 	Map.current_map = Map(map_path, game_disp)
 	
 	# Create the ship
@@ -36,7 +36,7 @@ def init():
 	from camera import Camera
 	camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h) # This should be the size of the map.
 	
-	print(" -- Finished initializing --")
+	print("Finished initializing.")
 	
 	loop()
 
@@ -72,6 +72,7 @@ def loop():
 	quit()
 	
 def quit():
+	print("Exiting.")
 	pygame.quit()
 
 if __name__ == "__main__": # Make sure the game is not being run twice!

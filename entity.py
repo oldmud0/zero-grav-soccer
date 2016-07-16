@@ -1,5 +1,10 @@
 import pygame
 
+import collision
+from map import Map
+
+from settings import COLLISION_DAMPING, COLLISION_ALGORITHM_EXPERIMENTAL
+
 class Entity(pygame.sprite.Sprite):
 	ent_in_control = None
 
@@ -11,6 +16,8 @@ class Entity(pygame.sprite.Sprite):
 		print("Loading", path) # Debugging purposes only
 		self.image = pygame.image.load(path).convert_alpha()
 		self.original_image = self.image
+		
+		self.mask = pygame.mask.from_surface(self.image)
 		
 		self.rect = self.image.get_rect()
 		
@@ -34,8 +41,10 @@ class Entity(pygame.sprite.Sprite):
 	
 	def action(self, delta):
 		self.move()
+		self.collision_detect()
 	
 	def move(self, delta):
+		"""Move a sprite using time-based movement."""
 		ideal_frame_time = 60 # FPS
 		displacement_factor = delta / ideal_frame_time
 				
@@ -47,3 +56,16 @@ class Entity(pygame.sprite.Sprite):
 		
 		self.rot = (self.rot + self.vrot) % 360
 		self.rot_center()
+	
+	def collision_detect(self):
+		"""Check for collisions against other entities or the map.
+		Collision detection is very tricky.
+		"""
+		point = pygame.sprite.collide_mask(Map.current_map, self)
+		if point:
+			# First, check if the collision was with a map or entity
+			if COLLISION_ALGORITHM_EXPERIMENTAL:
+				self.vx, self.vy = collision.calculate_reflection_angle(Map.current_map.mask, point, (self.vx, self.vy))
+			else 
+				self.vx, self.vy = collision.simple_collision(Map.current_map.mask, point, (self.vx, self.vy))
+			self.vx, self.vy = self.vx * COLLISION_DAMPING, self.vy * COLLISION_DAMPING
