@@ -27,6 +27,7 @@ def init():
 	
 	# Start the gamemode
 	gamemode = SoccerGame(game_disp)
+	game_disp.hud.acquire_gamemode_hud(gamemode)
 	
 	# Create the ship
 	from player_ship import PlayerShip

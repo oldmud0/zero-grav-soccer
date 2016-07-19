@@ -1,15 +1,18 @@
 import pygame, os
 
-class HUD(pygame.sprite.Sprite):
+class HUD:
 	"""Heads-up display"""
-	
-	arrow_path = os.path.join("res", "arrow.png")
 	
 	def __init__(self, surface):
 		self.surface = surface
-		self.elements = []
+		self.elements = pygame.sprite.Group()
 		
-		print("Loading", path)
-		self.image = pygame.image.load(path).convert_alpha()
+	def reset_hud(self):
+		self.elements.clear()
+		
+	def acquire_gamemode_hud(self, gamemode):
+		self.elements.add(gamemode.hud)
 		
 	def action(self):
+		for element in self.elements:
+			element.action()

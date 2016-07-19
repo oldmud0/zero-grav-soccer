@@ -18,7 +18,6 @@ class Ball(Entity):
 	def action(self, delta):
 		self.move(delta)
 		if self.collision_detect():
-			print(self.vx, self.vy)
 			self.collide_sound.play()
 		if self.collision_detect_others():
 			self.collide_sound.play()

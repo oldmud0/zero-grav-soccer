@@ -1,8 +1,12 @@
 import pygame
 
+from settings import DISP_WIDTH, DISP_HEIGHT
+
 from map import Map
 from ball import Ball
-from soccer_hud import SoccerHUD
+
+from hud_score import HUDScoreElement
+from hud_arrow import HUDArrowElement
 
 class SoccerGame:
 	"""Define game behavior for the soccer gamemode.
@@ -37,7 +41,10 @@ class SoccerGame:
 	@property
 	def hud(self):
 		"""Return the HUD elements suggested for the gamemode."""
-		return SoccerHUD
+		elements = pygame.sprite.Group()
+		elements.add(HUDScoreElement((round(DISP_WIDTH * 1), 35), lambda: self.red_team_score))
+		elements.add(HUDScoreElement((round(DISP_WIDTH * .5), 35), lambda: self.blue_team_score))
+		return elements
 	
 	def respawn_all(self):
 		for ship in self.red_team_ships + self.blue_team_ships:
