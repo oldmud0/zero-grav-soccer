@@ -2,6 +2,7 @@ import pygame
 
 from map import Map
 from ball import Ball
+from soccer_hud import SoccerHUD
 
 class SoccerGame:
 	"""Define game behavior for the soccer gamemode.
@@ -32,6 +33,11 @@ class SoccerGame:
 	def objective(self):
 		"""Return the main objective of the game (the ball)."""
 		return self._ball
+		
+	@property
+	def hud(self):
+		"""Return the HUD elements suggested for the gamemode."""
+		return SoccerHUD
 	
 	def respawn_all(self):
 		for ship in self.red_team_ships + self.blue_team_ships:
