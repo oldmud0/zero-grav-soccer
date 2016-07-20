@@ -2,9 +2,11 @@ import pygame, os
 
 from entity import Entity
 from ship import Ship
+from player_ship import PlayerShip
 from map import Map
 from soccer import SoccerGame
 from display import Display
+from camera import Camera
 
 from settings import COLLISION_UNSTUCK_EVENT_ID
 
@@ -23,23 +25,21 @@ def init():
 	
 	# Create the map
 	map_path = os.path.join("res", "le_football.png")
-	Map.current_map = Map(map_path, game_disp)
+	Map.current_map = Map(map_path)
 	
 	# Start the gamemode
 	gamemode = SoccerGame(game_disp)
 	game_disp.hud.acquire_gamemode_hud(gamemode)
 	
 	# Create the ship
-	from player_ship import PlayerShip
 	ship = PlayerShip(game_disp, 0, gamemode)
 	game_disp.objects.add(ship)
-	Entity.ent_in_control = ship
+	game_disp.ent_in_control = ship
 	
 	# Create another ship!
 	ship2 = Ship(game_disp, 1, gamemode)
 	game_disp.objects.add(ship2)
 	
-	from camera import Camera
 	game_disp.camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h) # This should be the size of the map.
 	
 	pygame.time.set_timer(COLLISION_UNSTUCK_EVENT_ID, 1000)
@@ -47,7 +47,7 @@ def init():
 	print("Finished initializing.")
 	
 	loop()
-
+	
 def pollEvents():
 	"""Process all (key) events passed to pygame."""
 	for event in pygame.event.get():
@@ -59,8 +59,8 @@ def pollEvents():
 		elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
 			if event.key == pygame.K_ESCAPE:
 				stop = True
-			Entity.ent_in_control.handleInputs(event)
-		
+			game_disp.ent_in_control.handleInputs(event)
+	
 def loop():
 	"""Primary game loop."""
 	while not stop:		

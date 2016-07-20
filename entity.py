@@ -6,8 +6,6 @@ from map import Map
 from settings import COLLISION_DAMPING, COLLISION_ALGORITHM_EXPERIMENTAL, COLLISION_STUCK_THRESHOLD, COLLISION_UNSTUCK_AGGRESSION
 
 class Entity(pygame.sprite.Sprite):
-	ent_in_control = None
-	
 	mass = 100
 	
 	collision_counter = 0

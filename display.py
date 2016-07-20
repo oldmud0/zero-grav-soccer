@@ -9,6 +9,7 @@ class Display:
 	"""Holds all of the game's internals and objects."""
 	
 	clock = None
+	ent_in_control = None
 	
 	def __init__(self):
 		self.surface = pygame.display.set_mode((DISP_WIDTH, DISP_HEIGHT))
@@ -22,7 +23,7 @@ class Display:
 		delta = self.clock.tick(60)
 		for object in self.objects:
 			object.action(delta)
-		self.camera.update(Entity.ent_in_control)
+		self.camera.update(self.ent_in_control)
 		self.hud.action()
 		
 	def render(self):

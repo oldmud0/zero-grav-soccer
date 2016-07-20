@@ -3,11 +3,9 @@ import pygame, os
 class Map(pygame.sprite.Sprite):
 	current_map = None
 
-	def __init__(self, path, surface, collision_path = None):
+	def __init__(self, path, collision_path = None):
 		pygame.sprite.Sprite.__init__(self)
-		
-		self.surface = surface
-		
+				
 		print("Loading", path) # Debugging purposes only
 		self.image = pygame.image.load(path).convert()
 		
