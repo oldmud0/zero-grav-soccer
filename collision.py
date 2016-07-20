@@ -25,7 +25,7 @@ def simple_collision(mask, point, vel):
 		print("Collision warning: unusual wall -", l_pt, r_pt, u_pt, d_pt)
 		return (-vel[0], -vel[1])
 		
-def elastic_collision(obj1, obj2):
+def elastic_collision(obj1, obj2, point):
 	"""Alter the velocities of two entities to simulate an elastic collision.
 	Courtesy of https://metakatie.wordpress.com/2008/09/14/elastic-collision-conserved-momentum/
 	v_1 = (m_1 - m_2)v_{1x} + 2m_2*v_{2x} / (m_1 + m_2)
@@ -34,8 +34,8 @@ def elastic_collision(obj1, obj2):
 	obj1.vx += ((obj1.mass - obj2.mass) * obj1.vx + 2 * obj2.mass * obj2.vx) / (obj1.mass + obj2.mass)
 	obj1.vy += ((obj1.mass - obj2.mass) * obj1.vy + 2 * obj2.mass * obj2.vy) / (obj1.mass + obj2.mass)
 	
-	if obj2.vx != 0:
-		obj1.vrot -= math.atan(obj2.vy / obj2.vx)
+	point_dist = point[0] - 8 + point[1] - 8 # Theoretical distance of collision from center of mass
+	obj1.vrot -= math.atan((obj2.vy + obj2.vx) / point_dist ) * point_dist
 	
 	obj2.vx -= ((obj2.mass - obj1.mass) * obj2.vx + 2 * obj1.mass * obj1.vx) / (obj1.mass + obj2.mass)
 	obj2.vy -= ((obj2.mass - obj1.mass) * obj2.vy + 2 * obj1.mass * obj1.vy) / (obj1.mass + obj2.mass)

@@ -26,6 +26,7 @@ class Ball(Entity):
 		objects = list(self.surface.objects)
 		objects.remove(self)
 		for obj in objects:
-			if pygame.sprite.collide_mask(self, obj):
+			point = pygame.sprite.collide_mask(obj, self)
+			if point:
 				# BONK!
-				collision.elastic_collision(obj, self)
+				collision.elastic_collision(obj, self, point)
