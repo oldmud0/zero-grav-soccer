@@ -10,9 +10,6 @@ class Ship(Entity):
 	mass = 300
 
 	def __init__(self, surface, team, gamemode):
-		path = os.path.join("res", "ship-sprite.png")
-		super(Ship, self).__init__(path, surface)
-		
 		self.team = team
 		self.gamemode = gamemode
 		gamemode.change_team(self, team)
@@ -22,13 +19,17 @@ class Ship(Entity):
 			self.x = Map.current_map.rect.w * 0.4
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 270
+			path = os.path.join("res", "ship-sprite-red.png")
 		elif self.team == 1:
 			# blue team faces left
 			self.x = Map.current_map.rect.w * 0.6
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 90
+			path = os.path.join("res", "ship-sprite-blue.png")
 		else:
 			assert(False)
+		
+		super(Ship, self).__init__(path, surface)
 		
 		self.thrust	= False
 		self.left = False

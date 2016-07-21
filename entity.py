@@ -92,7 +92,7 @@ class Entity(pygame.sprite.Sprite):
 		"""
 		for obj in objects:
 			if obj.collision_counter > obj.collision_threshold:
-				print("Object at", (obj.x, obj.y), "is stuck. Trying to unstuck...")
+				print("Object at", (round(obj.x), round(obj.y)), "is stuck. Trying to unstuck...")
 				obj.unstuck()
 			obj.collision_counter = 0
 	
