@@ -10,6 +10,14 @@ class Entity(pygame.sprite.Sprite):
 	
 	collision_counter = 0
 	collision_threshold = COLLISION_STUCK_THRESHOLD
+	
+	x = 0
+	y = 0
+	rot = 0
+	
+	vx = 0
+	vy = 0
+	vrot = 0
 
 	def __init__(self, path, surface):
 		pygame.sprite.Sprite.__init__(self)
@@ -23,8 +31,6 @@ class Entity(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		
 		self.rect = self.image.get_rect()
-		
-		self.respawn()
 	
 	def respawn(self):
 		self.x = 0

@@ -4,6 +4,8 @@ import collision
 from entity import Entity
 from map import Map
 
+from settings import SHIP_ACCELERATION
+
 class Ship(Entity):
 	mass = 300
 
@@ -12,6 +14,7 @@ class Ship(Entity):
 		super(Ship, self).__init__(path, surface)
 		
 		self.team = team
+		self.gamemode = gamemode
 		gamemode.change_team(self, team)
 		
 		if self.team == 0:
@@ -40,8 +43,8 @@ class Ship(Entity):
 	
 	def action(self, delta):
 		if self.thrust:
-			self.vx += -.1*math.sin(math.radians(self.rot))
-			self.vy += -.1*math.cos(math.radians(self.rot))
+			self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
+			self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
 		if self.left:
 			self.vrot = self.vrot / 2 + 2
 		if self.right:

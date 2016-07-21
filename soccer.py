@@ -27,9 +27,9 @@ class SoccerGame:
 		
 	def get_spawn_pos(self, ship):
 		if ship.team == 0:
-			return map.current_map.rect.w / 2 - 50, map.current_map.rect.h / 3 * (1 + self.red_team_ships.index(ship))
+			return Map.current_map.rect.w / 2 - 50, Map.current_map.rect.h / 3 * (1 + self.red_team_ships.index(ship)), 270
 		elif ship.team == 1:
-			return map.current_map.rect.w / 2 + 50, map.current_map.rect.h / 3 * (1 + self.blue_team_ships.index(ship))
+			return Map.current_map.rect.w / 2 + 50, Map.current_map.rect.h / 3 * (1 + self.blue_team_ships.index(ship)), 90
 		else:
 			assert(False)
 	
