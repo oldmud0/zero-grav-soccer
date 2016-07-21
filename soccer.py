@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 
 from settings import DISP_WIDTH, DISP_HEIGHT
 
@@ -13,6 +13,7 @@ class SoccerGame:
 	Red team is 0, and blue team is 1.
 	"""
 	
+	
 	red_team_score = 0
 	red_team_ships = []
 	
@@ -24,6 +25,7 @@ class SoccerGame:
 	def __init__(self, surface):
 		self._ball = Ball(surface)
 		surface.objects.add(self._ball)
+		self.goal_sound = pygame.mixer.Sound(os.path.join("res", "goal.wav"))
 		
 	def get_spawn_pos(self, ship):
 		if ship.team == 0:
@@ -32,6 +34,16 @@ class SoccerGame:
 			return Map.current_map.rect.w / 2 + 50, Map.current_map.rect.h / 3 * (1 + self.blue_team_ships.index(ship)), 90
 		else:
 			assert(False)
+			
+	def update(self):
+		team_scored = self._ball.team_scored
+		if team_scored > -1:
+			if team_scored == 0:
+				self.red_team_score += 1
+			elif team_scored == 1:
+				self.blue_team_score += 1
+			self.goal_sound.play()
+			self._ball.respawn()
 	
 	@property
 	def objective(self):

@@ -59,6 +59,13 @@ class Ship(Entity):
 			self.collide_sound.play()
 		if self.collision_detect_others():
 			self.collide_with_ship_sound.play()
+			
+		if self.x < 0 or self.x > Map.current_map.rect.w or self.y < 0 or self.y > Map.current_map.rect.h:
+			self.respawn()
+			
+	def respawn(self):
+		super(Ship, self).respawn()
+		self.x, self.y, self.rot = self.gamemode.get_spawn_pos(self)
 		
 	def collision_detect_others(self):
 		teammates = self.gamemode.get_enemies(self)

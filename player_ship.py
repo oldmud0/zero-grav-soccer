@@ -7,7 +7,6 @@ class PlayerShip(Ship):
 	def __init__(self, surface, team, gamemode):
 		self.team = None
 		self.team = gamemode.request_change_team(self, team)
-		self.gamemode = gamemode
 		super(PlayerShip, self).__init__(surface, team, gamemode)
 	
 	def handleInputs(self, event):
@@ -28,8 +27,4 @@ class PlayerShip(Ship):
 			self.grabbing = on
 		elif event.key == pygame.K_r:
 			self.respawn()
-			
-	def respawn(self):
-		super(PlayerShip, self).respawn()
-		self.x, self.y, self.rot = self.gamemode.get_spawn_pos(self)
 		

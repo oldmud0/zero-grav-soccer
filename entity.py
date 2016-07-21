@@ -31,7 +31,7 @@ class Entity(pygame.sprite.Sprite):
 		self.mask = pygame.mask.from_surface(self.image)
 		
 		self.rect = self.image.get_rect()
-	
+		
 	def respawn(self):
 		self.x = 0
 		self.y = 0

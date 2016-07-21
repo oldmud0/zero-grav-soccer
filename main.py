@@ -67,6 +67,7 @@ def loop():
 		pollEvents();
 		
 		game_disp.update()
+		gamemode.update()
 		game_disp.render()
 	quit()
 	

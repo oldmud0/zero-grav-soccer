@@ -35,7 +35,8 @@ def elastic_collision(obj1, obj2, point):
 	obj1.vy += ((obj1.mass - obj2.mass) * obj1.vy + 2 * obj2.mass * obj2.vy) / (obj1.mass + obj2.mass)
 	
 	point_dist = point[0] - 8 + point[1] - 8 # Theoretical distance of collision from center of mass
-	obj1.vrot -= math.atan((obj2.vy + obj2.vx) / point_dist ) * point_dist
+	if point_dist != 0:
+		obj1.vrot -= math.atan((obj2.vy + obj2.vx) / point_dist ) * point_dist
 	
 	obj2.vx -= ((obj2.mass - obj1.mass) * obj2.vx + 2 * obj1.mass * obj1.vx) / (obj1.mass + obj2.mass)
 	obj2.vy -= ((obj2.mass - obj1.mass) * obj2.vy + 2 * obj1.mass * obj1.vy) / (obj1.mass + obj2.mass)
