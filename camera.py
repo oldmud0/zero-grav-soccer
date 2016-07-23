@@ -16,8 +16,8 @@ class Camera:
 		"""Apply the position transformations to an entity/sprite."""
 		return target.rect.move(self.rect.topleft)
 	
-	def update(self, target):
-		self.rect = self.follow(target.rect.center)
+	def update(self):
+		self.rect = self.follow(self.target.rect.center)
 		
 	def follow(self, target):
 		x, y = target # Center X and Y of target's rectangle/sprite

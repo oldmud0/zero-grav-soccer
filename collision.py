@@ -10,10 +10,10 @@ def simple_collision(mask, point, vel):
 	x_max, y_max = mask.get_size()
 	
 	u_pt = mask.get_at((point[0], max(0, point[1]-30)))
-	d_pt = mask.get_at((point[0], min(y_max, point[1]+30)))
+	d_pt = mask.get_at((point[0], min(y_max-1, point[1]+30)))
 	
 	l_pt = mask.get_at((max(0, point[0]-30), point[1]))
-	r_pt = mask.get_at((min(x_max, point[0]+30), point[1]))
+	r_pt = mask.get_at((min(x_max-1, point[0]+30), point[1]))
 	
 	if (l_pt ^ r_pt) and u_pt and d_pt: # Is this a vertical wall?
 		return (-vel[0], vel[1])

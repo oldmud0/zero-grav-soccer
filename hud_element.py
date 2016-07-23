@@ -11,6 +11,7 @@ class HUDElement(pygame.sprite.Sprite):
 		self.image = pygame.image.load(self.path).convert_alpha()
 		
 		self.rect = self.image.get_rect()
+		self.rect.w /= 10
 		self.rect.center = position
 	
 	def action(self):

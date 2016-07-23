@@ -10,8 +10,8 @@ class HUD:
 	def reset_hud(self):
 		self.elements.clear()
 		
-	def acquire_gamemode_hud(self, gamemode):
-		self.elements.add(gamemode.hud)
+	def acquire_gamemode_hud(self, gamemode, camera):
+		self.elements.add(gamemode.new_hud(camera))
 		
 	def action(self):
 		for element in self.elements:

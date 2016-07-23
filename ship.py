@@ -19,13 +19,13 @@ class Ship(Entity):
 			self.x = Map.current_map.rect.w * 0.4
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 270
-			path = os.path.join("res", "ship-sprite-red.png")
+			path = os.path.join("res", "ship-sprite-blue.png")
 		elif self.team == 1:
 			# blue team faces left
 			self.x = Map.current_map.rect.w * 0.6
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 90
-			path = os.path.join("res", "ship-sprite-blue.png")
+			path = os.path.join("res", "ship-sprite-red.png")
 		else:
 			assert(False)
 		

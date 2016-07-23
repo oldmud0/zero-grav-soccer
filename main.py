@@ -29,7 +29,7 @@ def init():
 	
 	# Start the gamemode
 	gamemode = SoccerGame(game_disp)
-	game_disp.hud.acquire_gamemode_hud(gamemode)
+	game_disp.load_game(gamemode)
 	
 	# Create the ship
 	ship = PlayerShip(game_disp, 0, gamemode)
@@ -37,10 +37,8 @@ def init():
 	game_disp.ent_in_control = ship
 	
 	# Create another ship!
-	ship2 = Ship(game_disp, 1, gamemode)
-	game_disp.objects.add(ship2)
-	
-	game_disp.camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h) # This should be the size of the map.
+	#ship2 = Ship(game_disp, 1, gamemode)
+	#game_disp.objects.add(ship2)
 	
 	pygame.time.set_timer(COLLISION_UNSTUCK_EVENT_ID, 1000)
 	

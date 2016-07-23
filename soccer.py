@@ -49,13 +49,13 @@ class SoccerGame:
 	def objective(self):
 		"""Return the main objective of the game (the ball)."""
 		return self._ball
-		
-	@property
-	def hud(self):
+	
+	def new_hud(self, camera):
 		"""Return the HUD elements suggested for the gamemode."""
 		elements = pygame.sprite.Group()
-		elements.add(HUDScoreElement((round(DISP_WIDTH * 1), 35), lambda: self.red_team_score))
-		elements.add(HUDScoreElement((round(DISP_WIDTH * .5), 35), lambda: self.blue_team_score))
+		elements.add(HUDScoreElement((round(DISP_WIDTH * .33), 35), lambda: self.red_team_score))
+		elements.add(HUDScoreElement((round(DISP_WIDTH * .66), 35), lambda: self.blue_team_score))
+		#elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
 		return elements
 	
 	def respawn_all(self):
