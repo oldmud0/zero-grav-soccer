@@ -13,12 +13,11 @@ class SoccerGame:
 	Red team is 0, and blue team is 1.
 	"""
 	
+	blue_team_score = 0
+	blue_team_ships = []
 	
 	red_team_score = 0
 	red_team_ships = []
-	
-	blue_team_score = 0
-	blue_team_ships = []
 	
 	_ball = None
 	
@@ -29,9 +28,9 @@ class SoccerGame:
 		
 	def get_spawn_pos(self, ship):
 		if ship.team == 0:
-			return Map.current_map.rect.w / 2 - 50, Map.current_map.rect.h / 3 * (1 + self.red_team_ships.index(ship)), 270
+			return Map.current_map.rect.w / 2 - 50, Map.current_map.rect.h / 3 * (1 + self.blue_team_ships.index(ship)), 270
 		elif ship.team == 1:
-			return Map.current_map.rect.w / 2 + 50, Map.current_map.rect.h / 3 * (1 + self.blue_team_ships.index(ship)), 90
+			return Map.current_map.rect.w / 2 + 50, Map.current_map.rect.h / 3 * (1 + self.red_team_ships.index(ship)), 90
 		else:
 			assert(False)
 			
@@ -39,9 +38,9 @@ class SoccerGame:
 		team_scored = self._ball.team_scored
 		if team_scored > -1:
 			if team_scored == 0:
-				self.red_team_score += 1
-			elif team_scored == 1:
 				self.blue_team_score += 1
+			elif team_scored == 1:
+				self.red_team_score += 1
 			self.goal_sound.play()
 			self._ball.respawn()
 	
@@ -53,8 +52,8 @@ class SoccerGame:
 	def new_hud(self, camera):
 		"""Return the HUD elements suggested for the gamemode."""
 		elements = pygame.sprite.Group()
-		elements.add(HUDScoreElement((round(DISP_WIDTH * .33), 35), lambda: self.red_team_score))
-		elements.add(HUDScoreElement((round(DISP_WIDTH * .66), 35), lambda: self.blue_team_score))
+		elements.add(HUDScoreElement((round(DISP_WIDTH * .33), 35), lambda: self.blue_team_score))
+		elements.add(HUDScoreElement((round(DISP_WIDTH * .66), 35), lambda: self.red_team_score))
 		#elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
 		return elements
 	

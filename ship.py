@@ -15,13 +15,13 @@ class Ship(Entity):
 		gamemode.change_team(self, team)
 		
 		if self.team == 0:
-			# red team faces right
+			# blue team faces right
 			self.x = Map.current_map.rect.w * 0.4
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 270
 			path = os.path.join("res", "ship-sprite-blue.png")
 		elif self.team == 1:
-			# blue team faces left
+			# red team faces left
 			self.x = Map.current_map.rect.w * 0.6
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 90

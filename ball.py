@@ -25,9 +25,9 @@ class Ball(Entity):
 		# Based on which side the ball went, we can figure out who scored the goal.
 		# However, it's the gamemode's responsibility to decide whether or not respawn the ball
 		if self.x < 0:
-			self.team_scored = 0
-		if self.x > Map.current_map.rect.w:
 			self.team_scored = 1
+		if self.x > Map.current_map.rect.w:
+			self.team_scored = 0
 			
 		# Loop over? Might be an interesting concept to try.
 		if self.y < 0:
