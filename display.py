@@ -9,25 +9,17 @@ from camera import Camera
 class Display:
 	"""Holds all of the game's internals and objects."""
 	
-	clock = None
-	
 	_ent_in_control = None
 	
-	def __init__(self):
-		self.surface = pygame.display.set_mode((DISP_WIDTH, DISP_HEIGHT))
-		
-		self.clock = pygame.time.Clock()
-		self.objects = pygame.sprite.Group()
-		self.hud = HUD(self)
+	def __init__(self, surface):
+		self.surface = surface
+		self.hud = HUD(surface)
 	
 	def load_game(self, gamemode):
-		self.camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h)
+		self.camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h, self.surface.get_width(), self.surface.get_height())
 		self.hud.acquire_gamemode_hud(gamemode, self.camera)
 		
 	def update(self):
-		delta = self.clock.tick(60)
-		for object in self.objects:
-			object.action(delta)
 		self.camera.update()
 		self.hud.action()
 	
@@ -44,11 +36,7 @@ class Display:
 		self.surface.fill((0xff, 0xff, 0xff))
 		
 		self.surface.blit(Map.current_map.image, self.camera.apply(Map.current_map))
-		for object in self.objects:
+		for object in Map.current_map.objects:
 			self.surface.blit(object.image, self.camera.apply(object))
-			
-		self.hud.elements.draw(self.surface)
-			
-		self.surface.blit
 		
-		pygame.display.update()
+		self.hud.elements.draw(self.surface)

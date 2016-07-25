@@ -9,7 +9,7 @@ from settings import SHIP_ACCELERATION
 class Ship(Entity):
 	mass = 300
 
-	def __init__(self, surface, team, gamemode):
+	def __init__(self, team, gamemode):
 		self.team = team
 		self.gamemode = gamemode
 		gamemode.change_team(self, team)
@@ -34,7 +34,7 @@ class Ship(Entity):
 		print("Loading", path_firing)
 		self.firing_sprite = pygame.image.load(path_firing).convert_alpha()
 		
-		super(Ship, self).__init__(path, surface)
+		super(Ship, self).__init__(path)
 		
 		self.thrust	= False
 		self.left = False

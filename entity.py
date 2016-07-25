@@ -19,10 +19,8 @@ class Entity(pygame.sprite.Sprite):
 	vy = 0
 	vrot = 0
 
-	def __init__(self, path, surface):
+	def __init__(self, path):
 		pygame.sprite.Sprite.__init__(self)
-		
-		self.surface = surface
 		
 		print("Loading", path) # Debugging purposes only
 		self.image = pygame.image.load(path).convert_alpha()

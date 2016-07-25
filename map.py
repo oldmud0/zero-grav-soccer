@@ -2,6 +2,7 @@ import pygame, os
 
 class Map(pygame.sprite.Sprite):
 	current_map = None
+	objects = pygame.sprite.Group()
 
 	def __init__(self, path, collision_path = None):
 		pygame.sprite.Sprite.__init__(self)
@@ -24,4 +25,7 @@ class Map(pygame.sprite.Sprite):
 			self.mask = pygame.mask.from_surface(self.image)
 		
 		self.rect = self.image.get_rect()
-		
+	
+	def action(self, delta):
+		for object in self.objects:
+			object.action(delta)

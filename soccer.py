@@ -21,9 +21,9 @@ class SoccerGame:
 	
 	_ball = None
 	
-	def __init__(self, surface):
-		self._ball = Ball(surface)
-		surface.objects.add(self._ball)
+	def __init__(self):
+		self._ball = Ball()
+		Map.current_map.objects.add(self._ball)
 		self.goal_sound = pygame.mixer.Sound(os.path.join("res", "goal.wav"))
 		
 	def get_spawn_pos(self, ship):
@@ -49,11 +49,11 @@ class SoccerGame:
 		"""Return the main objective of the game (the ball)."""
 		return self._ball
 	
-	def new_hud(self, camera):
+	def new_hud(self, width, camera):
 		"""Return the HUD elements suggested for the gamemode."""
 		elements = pygame.sprite.Group()
-		elements.add(HUDScoreElement((round(DISP_WIDTH * .33), 35), lambda: self.blue_team_score))
-		elements.add(HUDScoreElement((round(DISP_WIDTH * .66), 35), lambda: self.red_team_score))
+		elements.add(HUDScoreElement((round(width * .33), 35), lambda: self.blue_team_score))
+		elements.add(HUDScoreElement((round(width * .66), 35), lambda: self.red_team_score))
 		#elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
 		return elements
 	

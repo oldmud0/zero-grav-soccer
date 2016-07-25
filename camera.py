@@ -1,7 +1,5 @@
 import pygame
 
-from settings import DISP_WIDTH, DISP_HEIGHT
-
 class Camera:
 	"""The Camera tracks the object being controlled while remaining within
 	the bounds of the level/scene.
@@ -9,8 +7,9 @@ class Camera:
 	Thanks to the good friends at Stack Overflow: http://stackoverflow.com/a/14357169/2958458
 	"""
 	
-	def __init__(self, width, height):
-		self.rect = pygame.Rect(0, 0, width, height)
+	def __init__(self, map_width, map_height, disp_width, disp_height):
+		self.rect = pygame.Rect(0, 0, map_width, map_height)
+		self.disp_width, self.disp_height = disp_width, disp_height
 	
 	def apply(self, target):
 		"""Apply the position transformations to an entity/sprite."""
@@ -20,14 +19,15 @@ class Camera:
 		self.rect = self.follow(self.target.rect.center)
 		
 	def follow(self, target):
-		x, y = target # Center X and Y of target's rectangle/sprite
-		_, _, w, h = self.rect # Width and height of our level
-		x, y, _, _ = DISP_WIDTH/2 - x, DISP_HEIGHT/2 - y, w, h # Center to target
+		dp_w, dp_h = self.disp_width, self.disp_height # Width and height of surface
+		x, y = target                                  # Center X and Y of target's rectangle/sprite
+		_, _, w, h = self.rect                         # Width and height of our level
+		x, y, _, _ = dp_w/2 - x, dp_h/2 - y, w, h      # Center to target
 		
 		# Clamp the rectangle's boundaries to the level's boundaries
 		x = min(0, x)
-		x = max(DISP_WIDTH - w, x)
-		y = max(DISP_HEIGHT - h, y)
+		x = max(dp_w - w, x)
+		y = max(dp_h - h, y)
 		y = min(0, y)
 		
 		return pygame.Rect(x, y, w, h)

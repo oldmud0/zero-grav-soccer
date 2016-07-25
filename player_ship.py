@@ -5,10 +5,10 @@ from ship_controls import ship_controls
 class PlayerShip(Ship):
 	"""A player-controllable version of the Ship."""
 	
-	def __init__(self, surface, team, gamemode):
+	def __init__(self, team, gamemode):
 		self.team = None
 		self.team = gamemode.request_change_team(self, team)
-		super(PlayerShip, self).__init__(surface, team, gamemode)
+		super(PlayerShip, self).__init__(team, gamemode)
 	
 	def handleInputs(self, event, player):
 		assert(event.type in (pygame.KEYDOWN, pygame.KEYUP))

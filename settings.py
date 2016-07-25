@@ -2,10 +2,10 @@ from pygame.locals import USEREVENT
 
 """Game constants to tweak portions of the game"""
 
-DISP_WIDTH = 1280
-DISP_HEIGHT = 720
+DISP_WIDTH = 1024
+DISP_HEIGHT = 620
 
-LOCAL_MP = False
+LOCAL_MP = True
 
 SHIP_ACCELERATION = 0.15
 SHIP_CONTROL_PRESET = 0 # See ship_controls.py

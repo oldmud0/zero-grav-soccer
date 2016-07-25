@@ -8,9 +8,9 @@ class Ball(Entity):
 	
 	mass = 200
 
-	def __init__(self, surface):
+	def __init__(self):
 		path = os.path.join("res", "ball.png")
-		super(Ball, self).__init__(path, surface)
+		super(Ball, self).__init__(path)
 		self.collide_sound = pygame.mixer.Sound(os.path.join("res", "bounce.wav"))
 		
 		self.respawn()
@@ -36,7 +36,7 @@ class Ball(Entity):
 			self.y = 0
 	
 	def collision_detect_others(self):
-		objects = list(self.surface.objects)
+		objects = list(Map.current_map.objects)
 		objects.remove(self)
 		for obj in objects:
 			point = pygame.sprite.collide_mask(obj, self)
