@@ -67,10 +67,10 @@ class SoccerGame:
 		
 		if len(self.red_team_ships) - 1 > len(self.blue_team_ships):
 			# Too many people in red team. Assign to blue instead.
-			requested = 1
+			requested = 0
 		elif len(self.blue_team_ships) - 1 > len(self.red_team_ships):
 			# and vice versa.
-			requested = 0
+			requested = 1
 		else:
 			# If no problems, just fulfill the request.
 			pass
@@ -90,24 +90,24 @@ class SoccerGame:
 			pass
 		
 		if ship.team == 0:
-			self.red_team_ships.append(ship)
-		elif ship.team == 1:
 			self.blue_team_ships.append(ship)
+		elif ship.team == 1:
+			self.red_team_ships.append(ship)
 	
 	def get_teammates(self, ship):
 		"""Get the list of a ship's teammates."""
 		if ship.team == 0:
-			teammates = list(self.red_team_ships)
-		if ship.team == 1:
 			teammates = list(self.blue_team_ships)
+		if ship.team == 1:
+			teammates = list(self.red_team_ships)
 		teammates.remove(ship)
 		return teammates
 		
 	def get_enemies(self, ship):
 		"""Get the list of a ship's enemies. Useful for collision checks."""
 		if ship.team == 0:
-			enemies = list(self.blue_team_ships)
-		if ship.team == 1:
 			enemies = list(self.red_team_ships)
+		if ship.team == 1:
+			enemies = list(self.blue_team_ships)
 		return enemies
 	
