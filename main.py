@@ -26,6 +26,9 @@ def init():
 	# Main surface is here in case there are multiple smaller surfaces for splitscreen
 	window = pygame.display.set_mode((DISP_WIDTH, DISP_HEIGHT))
 	
+	# Set window icon
+	pygame.display.set_icon(pygame.image.load(os.path.join("res", "icon.png")).convert_alpha())
+	
 	if LOCAL_MP:
 		surface_player1 = pygame.surface.Surface((DISP_WIDTH // 2, DISP_HEIGHT))
 		game_disp = Display(surface_player1)
