@@ -70,7 +70,7 @@ class Ship(Entity):
 			self.collide_with_ship_sound.play()
 			
 		if self.x < 0 or self.x > Map.current_map.rect.w or self.y < 0 or self.y > Map.current_map.rect.h:
-			self.respawn()
+			self.vx *= -1
 			
 	def respawn(self):
 		super(Ship, self).respawn()
