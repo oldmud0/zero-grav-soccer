@@ -8,15 +8,16 @@ from soccer import SoccerGame
 from display import Display
 from camera import Camera
 
-from settings import COLLISION_UNSTUCK_EVENT_ID
+from settings import COLLISION_UNSTUCK_EVENT_ID, LOCAL_MP
 
 game_disp = None
+player2 = None
 
 stop = False
 
 def init():
 	"""Initialize pygame and all objects/variables needed to begin the game."""
-	global game_disp, camera, gamemode
+	global game_disp, camera, gamemode, player2
 	
 	pygame.init()
 	
@@ -36,9 +37,11 @@ def init():
 	game_disp.objects.add(ship)
 	game_disp.ent_in_control = ship
 	
-	# Create another ship!
-	#ship2 = Ship(game_disp, 1, gamemode)
-	#game_disp.objects.add(ship2)
+	if LOCAL_MP:
+		# Create another ship!
+		ship2 = PlayerShip(game_disp, 1, gamemode)
+		game_disp.objects.add(ship2)
+		player2 = ship2
 	
 	pygame.time.set_timer(COLLISION_UNSTUCK_EVENT_ID, 1000)
 	
@@ -57,7 +60,9 @@ def pollEvents():
 		elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
 			if event.key == pygame.K_ESCAPE:
 				stop = True
-			game_disp.ent_in_control.handleInputs(event)
+			game_disp.ent_in_control.handleInputs(event, 0)
+			if LOCAL_MP:
+				player2.handleInputs(event, 1)
 	
 def loop():
 	"""Primary game loop."""
