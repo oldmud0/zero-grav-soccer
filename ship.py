@@ -20,14 +20,19 @@ class Ship(Entity):
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 270
 			path = os.path.join("res", "ship-sprite-blue.png")
+			path_firing = os.path.join("res", "ship-sprite-blue-firing.png")
 		elif self.team == 1:
 			# red team faces left
 			self.x = Map.current_map.rect.w * 0.6
 			self.y = Map.current_map.rect.h / 2
 			self.rot = 90
 			path = os.path.join("res", "ship-sprite-red.png")
+			path_firing = os.path.join("res", "ship-sprite-red-firing.png")
 		else:
 			assert(False)
+			
+		print("Loading", path_firing)
+		self.firing_sprite = pygame.image.load(path_firing).convert_alpha()
 		
 		super(Ship, self).__init__(path, surface)
 		
@@ -46,6 +51,9 @@ class Ship(Entity):
 		if self.thrust:
 			self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
 			self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
+			self.current_sprite = self.firing_sprite
+		else:
+			self.current_sprite = self.main_sprite
 		if self.left:
 			self.vrot = self.vrot / 2 + 2
 		if self.right:

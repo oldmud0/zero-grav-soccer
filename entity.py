@@ -26,7 +26,7 @@ class Entity(pygame.sprite.Sprite):
 		
 		print("Loading", path) # Debugging purposes only
 		self.image = pygame.image.load(path).convert_alpha()
-		self.original_image = self.image
+		self.current_sprite = self.main_sprite = self.image
 		
 		self.mask = pygame.mask.from_surface(self.image)
 		
@@ -47,7 +47,7 @@ class Entity(pygame.sprite.Sprite):
 		and then giving the rotated sprite the old center.
 		"""
 		loc = self.rect.center
-		self.image = pygame.transform.rotate(self.original_image, self.rot)
+		self.image = pygame.transform.rotate(self.current_sprite, self.rot)
 		self.rect = self.image.get_rect()
 		self.rect.center = loc
 	
