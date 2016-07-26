@@ -8,6 +8,8 @@ from settings import SHIP_ACCELERATION
 
 class Ship(Entity):
 	mass = 300
+	
+	path_collide_mask = os.path.join("res", "ship-collision.png")
 
 	def __init__(self, team, gamemode):
 		self.team = team
@@ -35,6 +37,8 @@ class Ship(Entity):
 		self.firing_sprite = pygame.image.load(path_firing).convert_alpha()
 		
 		super(Ship, self).__init__(path)
+		
+		self.mask = pygame.mask.from_surface(pygame.image.load(self.path_collide_mask).convert_alpha())
 		
 		self.thrust	= False
 		self.left = False
