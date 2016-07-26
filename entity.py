@@ -39,7 +39,7 @@ class Entity(pygame.sprite.Sprite):
 		self.vy = 0
 		self.vrot = 0
 		
-		obj.collision_counter = 0
+		self.collision_counter = 0
 	
 	def rot_center(self):
 		"""Rotate the entity's sprite while preserving the center.
