@@ -10,7 +10,7 @@ Positions, velocities, and angles are little-endian floats.
  - Handshake
  - Game info
  - Join team
- - Send player data regularly
+ - Send player data and entity data regularly
 
 ### Handshake
 **Client**

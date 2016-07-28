@@ -74,6 +74,7 @@ class Entity(pygame.sprite.Sprite):
 		Collision detection is very tricky.
 		"""
 		# Check if the collision was with a map
+		self.mask = pygame.mask.from_surface(self.image)
 		point = pygame.sprite.collide_mask(Map.current_map, self)
 		if point:
 			if COLLISION_ALGORITHM_EXPERIMENTAL:
