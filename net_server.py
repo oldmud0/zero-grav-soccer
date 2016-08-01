@@ -1,4 +1,4 @@
-import socket, codecs
+import socket, codecs, struct, warnings
 
 class Server:
 	"""Single-threaded listener.
@@ -42,8 +42,36 @@ class Server:
 					# Probably just internet noise. Drop the client.
 					drop_client(client)
 				# At this point, it's assumed that client.auth is True
+				
 				# Check join team packet
-				elif codec
+				elif data[0] == 5 and len(data) == 2:
+					team = self.gamemode.request_change_team(client.ship, data[1])
+					client.ship.team = team
+					self.send(bytes([4, team])
+				
+				# Player data
+				elif data[0] == 3 and len(data) == 25:
+					ply = client.ship
+					ply.x, \
+					ply.y, \
+					ply.vx, \
+					ply.vy, \
+					ply.rot, \
+					ply.vrot, \
+					input = struct.unpack("xffffffb", data)
+					
+					ply.left, \
+					ply.right, \
+					ply.thrust, \
+					ply.grab = [bool(input & (1 << n)) for n in range(4)]
+				
+				# Chat
+				elif data[0] == 5 and len(data) < 512:
+					try:
+						chat_msg = codecs.decode(data[2:], "utf-8")
+					except UnicodeError:
+						warnings.warn("Chat message from", client.name, "could not be decoded.", \
+							UnicodeWarning, stacklevel=2)
 				if len(data) == 0:
 					print("Connection with", client.raddr[0], "is closing.")
 					self.drop_client(client)
@@ -55,12 +83,18 @@ class Server:
 				pass
 				
 	def send_game_info(self, client):
-		
+		pass
 	
 	def drop_client(self, client):
 		client.shutdown(socket.SHUT_RDWR)
 		client.close()
 		self.clients.remove(client)
+	
+	def send(self, client, data):
+		try:
+			client.sendall(data)
+		except socket.timeout:
+			self.drop_client(client)
 	
 	def shutdown(self):
 		for client in self.clients:
