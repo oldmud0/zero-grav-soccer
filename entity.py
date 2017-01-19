@@ -20,13 +20,16 @@ class Entity(pygame.sprite.Sprite):
     vy = 0
     vrot = 0
 
+    alpha = 255
+
     def __init__(self, path):
         pygame.sprite.Sprite.__init__(self)
         
         print("Loading", path) # Debugging purposes only
         self.image = pygame.image.load(path).convert_alpha()
         self.current_sprite = self.main_sprite = self.image
-        
+        self.current_sprite_alpha = self.current_sprite.copy()
+
         self.mask = pygame.mask.from_surface(self.image)
         
         self.rect = self.image.get_rect()
@@ -48,10 +51,37 @@ class Entity(pygame.sprite.Sprite):
         and then giving the rotated sprite the old center.
         """
         loc = self.rect.center
-        self.image = pygame.transform.rotate(self.current_sprite, self.rot)
+        self.image = pygame.transform.rotate(self.current_sprite_alpha, self.rot)
         self.rect = self.image.get_rect()
         self.rect.center = loc
     
+    def set_alpha(self, alpha):
+        """Set the effective alpha of an entity.
+        We need to override the pygame's own set_alpha
+        method because it does not work on sprites with
+        a per-pixel alpha.
+        """
+        if alpha < 0 or alpha > 255:
+            raise ValueError("alpha must be betweeen 0 and 255")
+
+        self.alpha = alpha
+        self.draw_alpha()
+
+    def draw_alpha(self):
+        """Apply the current effective alpha to the sprite."""
+        if self.alpha == 255:
+            self.current_sprite_alpha = self.current_sprite
+        else:
+            mask = pygame.Surface(self.current_sprite.get_size(), flags=pygame.SRCALPHA)
+            mask.fill((255, 255, 255, self.alpha))
+            self.current_sprite_alpha = self.current_sprite.copy()
+            self.current_sprite_alpha.blit(mask, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
+
+    def set_sprite(self, image):
+        """Set a new image as the current sprite."""
+        self.current_sprite = image
+        self.draw_alpha()
+
     def action(self, delta):
         self.move()
         self.collision_detect()
@@ -74,9 +104,6 @@ class Entity(pygame.sprite.Sprite):
         """Check for collisions against other entities or the map.
         Collision detection is very tricky.
         """
-        if self.collision_ignore: 
-            return
-
         # Check if the collision was with a map
         self.mask = pygame.mask.from_surface(self.image)
         point = pygame.sprite.collide_mask(Map.current_map, self)

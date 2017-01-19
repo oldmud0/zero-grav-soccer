@@ -59,9 +59,9 @@ class Ship(Entity):
         if self.thrust:
             self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
             self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
-            self.current_sprite = self.firing_sprite
+            self.set_sprite(self.firing_sprite)
         else:
-            self.current_sprite = self.main_sprite
+            self.set_sprite(self.main_sprite)
         if self.left:
             self.vrot = self.vrot / 2 + 2
         if self.right:
@@ -85,14 +85,14 @@ class Ship(Entity):
             self.invuln_blink_timer -= 1
             if self.invuln_blink_timer == 0:
                 if self.invuln_blink:
-                    self.current_sprite.set_alpha(30)
+                    self.set_alpha(30)
                     print("Blink now!",self.invuln_timer)
                 else:
-                    self.current_sprite.set_alpha(255)
+                    self.set_alpha(255)
                 self.invuln_blink = not self.invuln_blink
                 self.invuln_blink_timer = self.invuln_timer // 30
             if self.invuln_timer <= 0:
-                self.current_sprite.set_alpha(255)
+                self.set_alpha(255)
                 self.make_invulnerable(False)
 
     def respawn(self):
