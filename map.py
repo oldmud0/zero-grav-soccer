@@ -1,8 +1,10 @@
 import pygame, os
+from bg_stars import Stars
 
 class Map(pygame.sprite.Sprite):
 	current_map = None
 	objects = pygame.sprite.Group()
+	background = None
 
 	def __init__(self, path, collision_path = None):
 		pygame.sprite.Sprite.__init__(self)
@@ -25,7 +27,10 @@ class Map(pygame.sprite.Sprite):
 			self.mask = pygame.mask.from_surface(self.image)
 		
 		self.rect = self.image.get_rect()
+
+		self.background = Stars(self.rect.size)
 	
 	def action(self, delta):
 		for object in self.objects:
 			object.action(delta)
+		self.background.update()

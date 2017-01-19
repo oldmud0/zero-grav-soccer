@@ -53,3 +53,6 @@ celerybeat-schedule
 # virtualenv
 venv/
 ENV/
+
+# Vim .swp
+*.swp
