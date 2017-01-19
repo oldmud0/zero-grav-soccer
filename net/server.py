@@ -33,8 +33,13 @@ class Server:
 			try:
 				data = client.recv(1024)
 				
-				# Check handshake packet
-				if not client.auth and data[:3] == b"\x08\x80" and len(data) > 4:
+				# Connection closing
+				if len(data) == 0:
+					print("Connection with", client.raddr[0], "is closing.")
+					self.drop_client(client)
+				
+				# Handshake packet
+				elif not client.auth and data[:3] == b"\x08\x80" and len(data) > 4:
 					client.auth = True
 					client.name = codecs.decode(data[3:], "utf-8")
 					send_game_info(client)
@@ -43,7 +48,7 @@ class Server:
 					drop_client(client)
 				# At this point, it's assumed that client.auth is True
 				
-				# Check join team packet
+				# Join team packet
 				elif data[0] == 5 and len(data) == 2:
 					team = self.gamemode.request_change_team(client.ship, data[1])
 					client.ship.team = team
@@ -58,12 +63,10 @@ class Server:
 					ply.vy, \
 					ply.rot, \
 					ply.vrot, \
-					input = struct.unpack("xffffffb", data)
-					
 					ply.left, \
 					ply.right, \
 					ply.thrust, \
-					ply.grab = [bool(input & (1 << n)) for n in range(4)]
+					ply.grab = PlayerPacket.decode(data)
 				
 				# Chat
 				elif data[0] == 5 and len(data) < 512:
@@ -72,9 +75,8 @@ class Server:
 					except UnicodeError:
 						warnings.warn("Chat message from", client.name, "could not be decoded.", \
 							UnicodeWarning, stacklevel=2)
-				if len(data) == 0:
-					print("Connection with", client.raddr[0], "is closing.")
-					self.drop_client(client)
+				
+				# Unknown packet
 				else:
 					print(data)
 			except socket.timeout:
