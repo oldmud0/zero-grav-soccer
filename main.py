@@ -24,7 +24,7 @@ def init():
 	clock = pygame.time.Clock()
 	
 	# Main surface is here in case there are multiple smaller surfaces for splitscreen
-	window = pygame.display.set_mode((DISP_WIDTH, DISP_HEIGHT))
+	window = pygame.display.set_mode((DISP_WIDTH*2, DISP_HEIGHT*2))
 	
 	# Set window icon
 	pygame.display.set_icon(pygame.image.load(os.path.join("res", "icon.png")).convert_alpha())
@@ -76,9 +76,9 @@ def pollEvents():
 		elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
 			if event.key == pygame.K_ESCAPE:
 				stop = True
-			game_disp.ent_in_control.handleInputs(event, 0)
+			game_disp.ent_in_control.handle_inputs(event, 0)
 			if LOCAL_MP:
-				game_disp2.ent_in_control.handleInputs(event, 1)
+				game_disp2.ent_in_control.handle_inputs(event, 1)
 	
 def loop():
 	"""Primary game loop."""
@@ -93,7 +93,7 @@ def loop():
 		game_disp.update()
 		game_disp.render()
 		
-		window.blit(game_disp.surface, (0, 0))
+		window.blit(game_disp.surface_scaled, (0, 0))
 		
 		if LOCAL_MP:
 			game_disp2.update()

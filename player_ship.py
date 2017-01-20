@@ -10,7 +10,7 @@ class PlayerShip(Ship):
 		self.team = gamemode.request_change_team(self, team)
 		super(PlayerShip, self).__init__(team, gamemode)
 	
-	def handleInputs(self, event, player):
+	def handle_inputs(self, event, player):
 		assert(event.type in (pygame.KEYDOWN, pygame.KEYUP))
 		
 		if event.type == pygame.KEYDOWN:

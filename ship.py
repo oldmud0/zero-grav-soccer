@@ -59,9 +59,12 @@ class Ship(Entity):
         if self.thrust:
             self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
             self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
-            self.set_sprite(self.firing_sprite)
+            if self.current_sprite != self.firing_sprite:
+                self.set_sprite(self.firing_sprite)
         else:
-            self.set_sprite(self.main_sprite)
+            if self.current_sprite != self.main_sprite:
+                self.set_sprite(self.main_sprite)
+
         if self.left:
             self.vrot = self.vrot / 2 + 2
         if self.right:
