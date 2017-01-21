@@ -2,8 +2,8 @@ from pygame.locals import USEREVENT
 
 """Game constants to tweak portions of the game"""
 
-DISP_WIDTH = 1024
-DISP_HEIGHT = 620
+DISP_WIDTH = 640
+DISP_HEIGHT = 400
 
 LOCAL_MP = False
 

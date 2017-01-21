@@ -11,10 +11,9 @@ class Display:
     
     _ent_in_control = None
     
-    def __init__(self, surface):
-        self.surface = surface
-        self.hud = HUD(surface)
-        self.surface_scaled = pygame.Surface((surface.get_width()*2, surface.get_height()*2))
+    def __init__(self, size):
+        self.surface = pygame.surface.Surface(size)
+        self.hud = HUD(self.surface)
     
     def load_game(self, gamemode):
         self.camera = Camera(Map.current_map.rect.w, Map.current_map.rect.h, self.surface.get_width(), self.surface.get_height())
@@ -46,5 +45,3 @@ class Display:
             self.surface.blit(object.image, self.camera.apply(object))
         
         self.hud.elements.draw(self.surface)
-
-        pygame.transform.scale(self.surface, self.surface_scaled.get_size(), self.surface_scaled)
