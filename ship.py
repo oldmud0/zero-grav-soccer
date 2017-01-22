@@ -4,7 +4,7 @@ import collision
 from entity import Entity
 from map import Map
 
-from settings import SHIP_ACCELERATION
+from settings import SHIP_ACCELERATION, SHIP_BRAKING
 
 class Ship(Entity):
     mass = 300
@@ -44,6 +44,7 @@ class Ship(Entity):
         self.left = False
         self.right = False
         self.grabbing = False
+        self.braking = False
         
         self.invuln_timer = 0
         self.invuln_blink = False
@@ -73,6 +74,9 @@ class Ship(Entity):
             self.vrot = self.vrot / 4
         if self.grabbing:
             pass
+        if self.braking:
+            self.vx *= SHIP_BRAKING
+            self.vy *= SHIP_BRAKING
         
         self.move(delta)
         if self.collision_detect():
@@ -89,7 +93,6 @@ class Ship(Entity):
             if self.invuln_blink_timer == 0:
                 if self.invuln_blink:
                     self.set_alpha(30)
-                    print("Blink now!",self.invuln_timer)
                 else:
                     self.set_alpha(255)
                 self.invuln_blink = not self.invuln_blink

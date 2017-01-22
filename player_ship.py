@@ -30,3 +30,5 @@ class PlayerShip(Ship):
 			self.grabbing = on
 		elif event.key in controls["respawn"]:
 			self.respawn()
+		elif event.key in controls["brake"]:
+		        self.braking = on
