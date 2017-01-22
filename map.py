@@ -36,7 +36,7 @@ class Map(pygame.sprite.Sprite):
         rects_file = open(rects_file_path).read()
         rects = json.loads(rects_file)
         for rect in rects:
-            self.collision_rects.add(pygame.rect.Rect(rect[0], rect[1], rect[2], rect[3]))
+            self.collision_rects.append(pygame.rect.Rect(rect[0], rect[1], rect[2], rect[3]))
     
     def action(self, delta):
         for object in self.objects:

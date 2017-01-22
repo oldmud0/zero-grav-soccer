@@ -11,6 +11,8 @@ def aabb_swept_collision(r1, vel, r2):
     vx = vel[0]
     vy = vel[1]
 
+    inf = float("inf") # math.inf works only in Python 3.5
+
     # Find distance and time needed to reach collision on each axis
     # We need to calculate the distance between the closest and farthest edges
     # of the two objects.
@@ -32,22 +34,22 @@ def aabb_swept_collision(r1, vel, r2):
 
     # Find time of entry/exit for each axis
     if vx == 0:
-        x_entry = -math.inf
-        x_exit = math.inf
+        x_entry = -inf
+        x_exit = inf
     else:
         x_entry = x_inv_entry / vx
         x_exit = x_inv_exit / vx
 
     if vy == 0:
-        y_entry = -math.inf
-        y_exit = math.inf
+        y_entry = -inf
+        y_exit = inf
     else:
         y_entry = y_inv_entry / vy
         y_exit = y_inv_exit / vy
 
     # Which axis collided first?
-    entry_time = math.max(x_entry, y_entry)
-    exit_time = math.min(x_exit, y_exit)
+    entry_time = max(x_entry, y_entry)
+    exit_time = min(x_exit, y_exit)
 
     # No collision?
     if entry_time > exit_time or x_entry < 0 and y_entry < 0 or x_entry > 1 or y_entry > 1:

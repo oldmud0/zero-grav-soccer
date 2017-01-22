@@ -91,8 +91,8 @@ class Entity(pygame.sprite.Sprite):
         ideal_frame_time = 60 # FPS
         displacement_factor = delta / ideal_frame_time
                 
-        self.x += self.vx * displacement_factor
-        self.y += self.vy * displacement_factor
+        #self.x += self.vx * displacement_factor
+        #self.y += self.vy * displacement_factor
         
         # If we do not round our floats, pygame will floor it for us (bad)
         self.rect.center = (round(self.x), round(self.y))
@@ -108,18 +108,24 @@ class Entity(pygame.sprite.Sprite):
         # Check if the collision was with a map
         # Rect-based collision code
         for map_rect in Map.current_map.collision_rects:
-            collision_time, norm_x, norm_y = collision.aabb_swept_collision(self.rect, (vx, vy), map_rect)
-            if collision_time != 1:
-                self.x += self.vx * collision_time
-                self.y += self.vy * collision_time
+            collision_time, norm_x, norm_y = collision.aabb_swept_collision(self.rect, (self.vx, self.vy), map_rect)
+            if collision_time != 1: break
+        self.x += self.vx * collision_time
+        self.y += self.vy * collision_time
 
-                remaining_time = 1 - collision_time
-                if abs(norm_x) > .0001:
-                    self.vx = -self.vx
-                if abs(norm_y) > .0001:
-                    self.vy = -self.vy
+        remaining_time = 1 - collision_time
+        """
+        if remaining_time > 0:
+            self.vx *= remaining_time;
+            self.vy *= remaining_time;
+        """
+        if collision_time != 1:
+            if abs(norm_x) > .0001:
+                self.vx = -self.vx
+            if abs(norm_y) > .0001:
+                self.vy = -self.vy
                 self.collision_counter += 1
-                return True
+            return True
         return False
 
         # Old, mask-based collision code
