@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, json
 from bg_stars import Stars
 
 class Map(pygame.sprite.Sprite):
@@ -29,6 +29,14 @@ class Map(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 
 		self.background = Stars(self.rect.size)
+
+		self.collision_rects = []
+		rects_file_path_ext = os.path.splitext(path)
+		rects_file_path = rects_file_path_ext[0] + "-collision.txt"
+		rects_file = open(rects_file_path).read()
+                rects = json.loads(rects_file)
+                for rect in rects:
+                    self.collision_rects.add(pygame.rect.Rect(rect[0], rect[1], rect[2], rect[3]))
 	
 	def action(self, delta):
 		for object in self.objects:

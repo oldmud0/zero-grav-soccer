@@ -104,7 +104,26 @@ class Entity(pygame.sprite.Sprite):
         """Check for collisions against other entities or the map.
         Collision detection is very tricky.
         """
+
         # Check if the collision was with a map
+        # Rect-based collision code
+        for map_rect in Map.current_map.collision_rects:
+            collision_time, norm_x, norm_y = collision.aabb_swept_collision(self.rect, (vx, vy), map_rect)
+            if collision_time != 1:
+                self.x += self.vx * collision_time
+                self.y += self.vy * collision_time
+
+                remaining_time = 1 - collision_time
+                if abs(norm_x) > .0001:
+                    self.vx = -self.vx
+                if abs(norm_y) > .0001:
+                    self.vy = -self.vy
+                self.collision_counter += 1
+                return True
+        return False
+
+        # Old, mask-based collision code
+        """
         self.mask = pygame.mask.from_surface(self.image)
         point = pygame.sprite.collide_mask(Map.current_map, self)
         if point:
@@ -117,6 +136,7 @@ class Entity(pygame.sprite.Sprite):
             self.collision_counter += 1
             return True
         return False
+        """
     
     def unstuck_all(objects):
         """Fix all entities that appears to be stuck.
