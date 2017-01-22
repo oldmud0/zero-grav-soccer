@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="24" height="13" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="Tilemap" tilewidth="1" tileheight="1" tilecount="0" columns="0"/>
+ <tileset firstgid="1" name="Arcade1" tilewidth="32" tileheight="32" tilecount="16" columns="4">
+  <image source="soccer_arcade1.png" width="128" height="128"/>
+ </tileset>
+ <imagelayer name="Image Layer 1" offsetx="64" offsety="48">
+  <image source="field.png" width="640" height="320"/>
+ </imagelayer>
+ <layer name="Tile Layer 1" width="24" height="13">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA9YGJgSGAE0oQwMxSzEoHZkMwH6k2gtpuBdiygh/kgf3NS23Ag4AKaDwondiimNuCA4qFuPjD8HYDh70Bt84Hhf4AVau5QTp8gAMy/B0DhRAgzQzErEZiNBmGODQAA2ccNrQ==
+  </data>
+ </layer>
+</map>

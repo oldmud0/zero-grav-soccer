@@ -56,7 +56,7 @@ def init():
     state = MENU
 
     # Create the map
-    map_path = os.path.join("res", "le_football.png")
+    map_path = os.path.join("res", "soccer_arcade1_tilemap.png")
     Map.current_map = Map(map_path)
     
     # Start the gamemode
