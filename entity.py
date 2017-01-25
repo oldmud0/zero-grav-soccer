@@ -3,7 +3,9 @@ import pygame, pygame.gfxdraw
 import collision
 from map import Map
 
-from settings import COLLISION_DAMPING, COLLISION_ALGORITHM_EXPERIMENTAL, COLLISION_STUCK_THRESHOLD, COLLISION_UNSTUCK_AGGRESSION
+from settings import COLLISION_DAMPING, COLLISION_ALGORITHM_EXPERIMENTAL, \
+    COLLISION_STUCK_THRESHOLD, COLLISION_UNSTUCK_AGGRESSION, \
+    DEBUG
 
 class Entity(pygame.sprite.Sprite):
     mass = 100
@@ -110,7 +112,7 @@ class Entity(pygame.sprite.Sprite):
         for map_rect in Map.current_map.collision_rects:
             collision_time, norm_x, norm_y = collision.aabb_swept_collision(self.rect, (self.vx, self.vy), map_rect)
             if collision_time != 1:
-                print(collision_time)
+                if DEBUG: print("[collision]", collision_time)
                 break
         self.x += self.vx * collision_time
         self.y += self.vy * collision_time

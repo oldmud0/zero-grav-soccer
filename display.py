@@ -37,7 +37,7 @@ class Display:
         
         bg = Map.current_map.background
         if bg is not None:
-            self.surface.blit(bg.image, self.camera.apply(bg))
+            self.surface.blit(bg, (0,0))
 
         self.surface.blit(Map.current_map.image, self.camera.apply(Map.current_map))
 

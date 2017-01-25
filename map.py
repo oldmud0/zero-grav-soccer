@@ -1,5 +1,6 @@
 import pygame, os, json, pygame.gfxdraw
 from bg_stars import Stars
+from settings import DEBUG
 
 class Map(pygame.sprite.Sprite):
     current_map = None
@@ -37,7 +38,7 @@ class Map(pygame.sprite.Sprite):
         rects = json.loads(rects_file)
         for rect in rects:
             self.collision_rects.append(pygame.rect.Rect(rect[0], rect[1], rect[2], rect[3]))
-            pygame.gfxdraw.rectangle(self.image, rect, (35, 20, 220))
+            if DEBUG: pygame.gfxdraw.rectangle(self.image, rect, (35, 20, 220))
     
     def action(self, delta):
         for object in self.objects:

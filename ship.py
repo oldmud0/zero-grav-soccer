@@ -4,7 +4,7 @@ import collision
 from entity import Entity
 from map import Map
 
-from settings import SHIP_ACCELERATION, SHIP_BRAKING
+from settings import SHIP_ACCELERATION, SHIP_BRAKING, DEBUG
 
 class Ship(Entity):
     mass = 300
@@ -100,7 +100,7 @@ class Ship(Entity):
             if self.invuln_timer <= 0:
                 self.set_alpha(255)
                 self.make_invulnerable(False)
-        pygame.gfxdraw.box(self.image, self.rect, (35, 45, 220))
+        if DEBUG: pygame.gfxdraw.box(self.image, self.rect, (35, 45, 220))
 
 
     def respawn(self):

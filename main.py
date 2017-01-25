@@ -10,7 +10,7 @@ from scanlines import Scanlines
 from startscreen import StartScreen
 import events
 
-from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP
+from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG
 
 window = None
 game_disp = None
@@ -118,7 +118,7 @@ def loop():
         # Simple FPS clock
         genTimer -= 1 
         if genTimer == 0:
-            print("[fps]", clock.get_fps())
+            if DEBUG: print("[fps]", clock.get_fps())
             genTimer = 100
         
         if state == MENU:
