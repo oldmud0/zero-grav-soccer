@@ -125,9 +125,9 @@ class Entity(pygame.sprite.Sprite):
         """
         if collision_time != 1:
             if abs(norm_x) > .0001:
-                self.vx = -self.vx
+                self.vx = -self.vx * COLLISION_DAMPING
             if abs(norm_y) > .0001:
-                self.vy = -self.vy
+                self.vy = -self.vy * COLLISION_DAMPING
                 self.collision_counter += 1
             return True
         return False
