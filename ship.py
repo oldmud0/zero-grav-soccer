@@ -57,6 +57,12 @@ class Ship(Entity):
         self.collide_with_ship_sound = pygame.mixer.Sound(os.path.join("res", "ship_ship_collision.wav"))
     
     def action(self, delta):
+        self.move(delta)
+        if self.collision_detect():
+            self.collide_sound.play()
+        if self.collision_detect_others():
+            self.collide_with_ship_sound.play()
+
         if self.thrust:
             self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
             self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
@@ -78,12 +84,6 @@ class Ship(Entity):
             self.vx *= SHIP_BRAKING
             self.vy *= SHIP_BRAKING
         
-        self.move(delta)
-        if self.collision_detect():
-            self.collide_sound.play()
-        if self.collision_detect_others():
-            self.collide_with_ship_sound.play()
-            
         if self.x < 0 or self.x > Map.current_map.rect.w or self.y < 0 or self.y > Map.current_map.rect.h:
             self.vx *= -1
 
@@ -100,6 +100,8 @@ class Ship(Entity):
             if self.invuln_timer <= 0:
                 self.set_alpha(255)
                 self.make_invulnerable(False)
+        pygame.gfxdraw.box(self.image, self.rect, (35, 45, 220))
+
 
     def respawn(self):
         super(Ship, self).respawn()

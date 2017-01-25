@@ -27,6 +27,7 @@ class StartScreen(pygame.surface.Surface):
             self.button_group.add(button)
         
         self.button_selected.select()
+        self.logo = pygame.image.load("res/menu/logo.png").convert_alpha()
         self.render()
 
     def handle_inputs(self, event):
@@ -45,7 +46,9 @@ class StartScreen(pygame.surface.Surface):
 
     def render(self):
         """Redraw start screen whenever it changes."""
+        self.fill((0,0,0))
         self.button_group.draw(self)
+        self.blit(self.logo, ((self.get_width() - self.logo.get_width()) // 2, round(self.get_height() * .2)))
 
     def start_game(self):
         pygame.event.post(pygame.event.Event(events.START_GAME, {"called_by": self}))

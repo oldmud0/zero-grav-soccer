@@ -1,4 +1,4 @@
-import pygame
+import pygame, pygame.gfxdraw
 
 import collision
 from map import Map
@@ -85,7 +85,7 @@ class Entity(pygame.sprite.Sprite):
     def action(self, delta):
         self.move()
         self.collision_detect()
-    
+
     def move(self, delta):
         """Move a sprite using time-based movement."""
         ideal_frame_time = 60 # FPS
@@ -109,7 +109,9 @@ class Entity(pygame.sprite.Sprite):
         # Rect-based collision code
         for map_rect in Map.current_map.collision_rects:
             collision_time, norm_x, norm_y = collision.aabb_swept_collision(self.rect, (self.vx, self.vy), map_rect)
-            if collision_time != 1: break
+            if collision_time != 1:
+                print(collision_time)
+                break
         self.x += self.vx * collision_time
         self.y += self.vy * collision_time
 
