@@ -56,3 +56,6 @@ ENV/
 
 # Vim .swp
 *.swp
+
+# cx_Freeze build files
+build/

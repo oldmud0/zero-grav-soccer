@@ -19,6 +19,8 @@ class SoccerGame:
     red_team_score = 0
     red_team_ships = []
 
+    win_score = 3
+
     _ball = None
 
     def __init__(self):
@@ -48,6 +50,10 @@ class SoccerGame:
                 self.red_team_score += 1
             self.goal_sound.play()
             self._ball.respawn()
+            if blue_team_score == win_score:
+                announce_win(0)
+            elif red_team_score == win_score:
+                announce_win(1)
 
     @property
     def objective(self):
@@ -116,3 +122,6 @@ class SoccerGame:
             enemies = list(self.blue_team_ships)
         return enemies
 
+    def announce_win(self, team):
+        """Announce the winning team."""
+        pass
