@@ -50,10 +50,10 @@ class SoccerGame:
                 self.red_team_score += 1
             self.goal_sound.play()
             self._ball.respawn()
-            if blue_team_score == win_score:
-                announce_win(0)
-            elif red_team_score == win_score:
-                announce_win(1)
+            if self.blue_team_score == self.win_score:
+                self.announce_win(0)
+            elif self.red_team_score == self.win_score:
+                self.announce_win(1)
 
     @property
     def objective(self):
