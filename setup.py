@@ -1,6 +1,6 @@
 import glob, cx_Freeze
 
-executables = [cx_Freeze.Executable("main.py", icon="res/icon.ico")]
+executables = [cx_Freeze.Executable("main.py", icon="res/icon.ico", targetName="zgsoccer.exe")]
 
 cx_Freeze.setup(
         name="Zero-Gravity Soccer",
