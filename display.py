@@ -43,5 +43,7 @@ class Display:
 
         for object in Map.current_map.objects:
             self.surface.blit(object.image, self.camera.apply(object))
-        
-        self.hud.elements.draw(self.surface)
+
+        for element in self.hud.elements:
+            if element.visible:
+                self.surface.blit(element.image, element.rect)

@@ -55,29 +55,6 @@ def init():
     startscreen = StartScreen(window_unscaled.get_size())
     state = MENU
 
-    # Create the map
-    map_path = os.path.join("res", "soccer_arcade1_tilemap.png")
-    Map.current_map = Map(map_path)
-    
-    # Start the gamemode
-    gamemode = SoccerGame()
-    game_disp.load_game(gamemode)
-    
-    # Create the ship
-    ship = PlayerShip(0, gamemode)
-    Map.objects.add(ship)
-    game_disp.ent_in_control = ship
-    
-    # Create player 2 ship and display if splitscreen is on
-    if LOCAL_MP:
-        game_disp2 = Display((DISP_WIDTH // 2, DISP_HEIGHT))
-        game_disp2.load_game(gamemode)
-
-        ship2 = PlayerShip(1, gamemode)
-        Map.objects.add(ship2)
-        game_disp2.ent_in_control = ship2
-    
-    pygame.time.set_timer(events.COLLISION_UNSTUCK, 1000)
     
     print("Finished initializing.")
     
@@ -105,7 +82,38 @@ def pollEvents():
         elif event.type == events.START_GAME:
             if state == GAME:
                 raise Exception("Game is already in main game state!")
+            start_game()
             state = GAME
+        elif event.type == events.TO_MENU:
+            if state == MENU:
+                raise Exception("Game is already in main menu state!")
+            state = MENU
+
+def start_game():
+    global game_disp, game_disp2, clock, gamemode, window, window_unscaled, scanlines, state, startscreen
+    # Create the map
+    map_path = os.path.join("res", "soccer_arcade1_tilemap.png")
+    Map.current_map = Map(map_path)
+    
+    # Start the gamemode
+    gamemode = SoccerGame()
+    game_disp.load_game(gamemode)
+    
+    # Create the ship
+    ship = PlayerShip(0, gamemode)
+    Map.objects.add(ship)
+    game_disp.ent_in_control = ship
+    
+    # Create player 2 ship and display if splitscreen is on
+    if LOCAL_MP:
+        game_disp2 = Display((DISP_WIDTH // 2, DISP_HEIGHT))
+        game_disp2.load_game(gamemode)
+
+        ship2 = PlayerShip(1, gamemode)
+        Map.objects.add(ship2)
+        game_disp2.ent_in_control = ship2
+    
+    pygame.time.set_timer(events.COLLISION_UNSTUCK, 1000)
     
 def loop():
     """Primary game loop."""

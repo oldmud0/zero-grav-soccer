@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, events
 
 from settings import DISP_WIDTH, DISP_HEIGHT
 
@@ -7,13 +7,14 @@ from ball import Ball
 
 from hud_score import HUDScoreElement
 from hud_arrow import HUDArrowElement
+from hud_win import HUDWinMessage
 
 class SoccerGame:
     """Define game behavior for the soccer gamemode.
     Red team is 0, and blue team is 1.
     """
 
-    blue_team_score = 0
+    blue_team_score = 2
     blue_team_ships = []
 
     red_team_score = 0
@@ -22,6 +23,8 @@ class SoccerGame:
     win_score = 3
 
     _ball = None
+
+    announce_win_timer = -1
 
     def __init__(self):
         self._ball = Ball()
@@ -55,16 +58,26 @@ class SoccerGame:
             elif self.red_team_score == self.win_score:
                 self.announce_win(1)
 
+        if self.announce_win_timer > 0:
+            self.announce_win_timer -= 1
+        elif self.announce_win_timer == 0:
+            raise Exception("Game ended, but going back to menu is not implemented yet. Come back next time!")
+            pygame.event.post(pygame.event.Event(events.TO_MENU, {"called_by": self}))
+            self.announce_win_timer -= 1
+
     @property
     def objective(self):
         """Return the main objective of the game (the ball)."""
         return self._ball
 
-    def new_hud(self, width, camera):
+    def new_hud(self, width, height, camera):
         """Return the HUD elements suggested for the gamemode."""
         elements = pygame.sprite.Group()
         elements.add(HUDScoreElement((round(width * .33), 35), lambda: self.blue_team_score))
         elements.add(HUDScoreElement((round(width * .66), 35), lambda: self.red_team_score))
+        
+        self.hud_win = HUDWinMessage((width // 2 - 100, height // 2))
+        elements.add(self.hud_win)
         #elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
         return elements
 
@@ -124,4 +137,5 @@ class SoccerGame:
 
     def announce_win(self, team):
         """Announce the winning team."""
-        pass
+        self.hud_win.show(team)
+        self.announce_win_timer = 360
