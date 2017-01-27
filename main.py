@@ -10,7 +10,7 @@ from scanlines import Scanlines
 from startscreen import StartScreen
 import events
 
-from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG
+from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG, WINDOWED
 
 window = None
 game_disp = None
@@ -31,9 +31,13 @@ def init():
     clock = pygame.time.Clock()
     
     # Main surface is here in case there are multiple smaller surfaces for splitscreen
-    #window_size = (DISP_WIDTH*2, DISP_HEIGHT*2)
-    window_size = (0,0)
-    window = pygame.display.set_mode(window_size, pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
+    if WINDOWED:
+        window_size = (DISP_WIDTH*2, DISP_HEIGHT*2)
+        window = pygame.display.set_mode(window_size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+    else:
+        window_size = (0,0)
+        window = pygame.display.set_mode(window_size, pygame.FULLSCREEN | pygame.HWSURFACE | pygame.DOUBLEBUF)
+
     window_unscaled = pygame.surface.Surface((DISP_WIDTH, DISP_HEIGHT))
 
     # Create post-processing filter
