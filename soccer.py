@@ -14,7 +14,7 @@ class SoccerGame:
     Red team is 0, and blue team is 1.
     """
 
-    blue_team_score = 2
+    blue_team_score = 0
     blue_team_ships = []
 
     red_team_score = 0
