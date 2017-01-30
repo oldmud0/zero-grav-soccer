@@ -71,6 +71,12 @@ class StartScreen(pygame.surface.Surface):
     def quit_game(self):
         pygame.event.post(pygame.event.Event(events.QUIT, {"called_by": self}))
 
+    def reset(self):
+        """Prepare menu for redisplay due to a change in game state"""
+        self._button_selected = 0
+        self.instructions_visible = False
+        self.render()
+
     @property
     def button_selected(self):
         return self.button_list[self._button_selected]

@@ -84,6 +84,7 @@ class ZeroGravitySoccer():
             elif event.type == events.TO_MENU:
                 if self.state == MENU:
                     raise Exception("Game is already in main menu state!")
+                self.startscreen.reset()
                 self.state = MENU
 
     def start_game(self):

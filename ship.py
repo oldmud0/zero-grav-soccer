@@ -11,6 +11,8 @@ class Ship(Entity):
     
     path_collide_mask = os.path.join("res", "ship-collision.png")
 
+    collision_sound_cooldown = 30
+
     def __init__(self, team, gamemode):
         self.team = team
         self.gamemode = gamemode
@@ -58,10 +60,20 @@ class Ship(Entity):
     
     def action(self, delta):
         self.move(delta)
+
+        collision = False
         if self.collision_detect():
-            self.collide_sound.play()
+            collision = True
+            if not self.collision_last_frame:
+                self.collide_sound.play()
+            self.collision_last_frame = True
         if self.collision_detect_others():
-            self.collide_with_ship_sound.play()
+            collision = True
+            if not self.collision_last_frame:
+                self.collide_with_ship_sound.play()
+            self.collision_last_frame = True
+        if not collision:
+            self.collision_last_frame = False
 
         if self.thrust:
             self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))

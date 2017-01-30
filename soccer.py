@@ -61,7 +61,6 @@ class SoccerGame:
         if self.announce_win_timer > 0:
             self.announce_win_timer -= 1
         elif self.announce_win_timer == 0:
-            raise Exception("Game ended, but going back to menu is not implemented yet. Come back next time!")
             pygame.event.post(pygame.event.Event(events.TO_MENU, {"called_by": self}))
             self.announce_win_timer -= 1
 
