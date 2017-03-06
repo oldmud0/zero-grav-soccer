@@ -24,17 +24,24 @@ class StartScreen(pygame.surface.Surface):
                 "res/menu/btn_quit_on.png",
                 self.quit_game, (size[0] // 2, size[1] // 2 + 80))
         ]
-
         for button in self.button_list:
             self.button_group.add(button)
-
         self.button_selected.select()
-        self.logo = pygame.image.load("res/menu/logo.png").convert_alpha()
+
+        self.logo = StartScreenLogo()
+        self.logo.static = True
+
+        self.logo_animation = True
+        self.logo_animation_progress = 0
+
         self.background = Stars(size)
+
         self.instructions = pygame.image.load("res/menu/instructions.png").convert()
+
         self.text_font = pygame.font.Font("res/gohufont-11.ttf", 11)
         self.text_copyright = self.text_font.render("Copyright (c) 2016-2017 Bennett Ramirez", False, (255, 255, 255))
         self.text_version = self.text_font.render("Pre-alpha 0.1.2", False, (255, 255, 255))
+
         self.render()
 
     def handle_inputs(self, event):
@@ -55,6 +62,22 @@ class StartScreen(pygame.surface.Surface):
                 if event.key == pygame.K_RETURN:
                     self.button_selected.action()
 
+    def update(self):
+        """Update anything that needs updating,
+        including re-rendering the start screen if needed.
+        """
+        if self.instructions_visible:
+            pass
+        else:
+            if self.logo_animation:
+                self.logo_animation_progress += 1/60
+                if self.logo_animation_progress >= 1:
+                    self.logo_animation = False
+                    self.logo.static = True
+                self.render()
+            # Animate logo if applicable
+            if self.logo.update(): self.render()
+
     def render(self):
         """Redraw start screen whenever it changes."""
         self.fill((0,0,0))
@@ -63,7 +86,18 @@ class StartScreen(pygame.surface.Surface):
         else:
             self.blit(self.background, (0,0))
             self.button_group.draw(self)
-            self.blit(self.logo, ((self.get_width() - self.logo.get_width()) // 2, round(self.get_height() * .2)))
+
+            if self.logo_animation:
+                # Calculate the new scaled logo dimensions
+                new_w = round(self.logo.get_width() * (10 - self.logo_animation_progress * 9))
+                new_h = round(self.logo.get_height() * (10 - self.logo_animation_progress * 9))
+                new_surf = pygame.transform.scale(self.logo.image, (new_w, new_h))
+                new_rect = new_surf.get_rect()
+                new_rect.midtop = (self.get_width() // 2, round(self.get_height() * .2 * self.logo_animation_progress))
+                self.blit(new_surf, new_rect)
+            else:
+                self.blit(self.logo.image, ((self.get_width() - self.logo.get_width()) // 2, round(self.get_height() * .2)),
+                        self.logo.rect)
             self.blit(self.text_copyright, ((self.get_width() - self.text_copyright.get_width(), \
                     self.get_height() - self.text_copyright.get_height())))
             self.blit(self.text_version, ((0, \
@@ -88,3 +122,53 @@ class StartScreen(pygame.surface.Surface):
     @property
     def button_selected(self):
         return self.button_list[self._button_selected]
+
+class StartScreenLogo(pygame.sprite.Sprite):
+
+    _static = True
+    frame_current = 0
+    frame_max = 4
+
+    update_timer = 60/5
+    update_timer_max = 60/5
+
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = self.image_static = pygame.image.load("res/menu/logo.png").convert_alpha()
+        self.rect = self.image.get_rect()
+
+        self.image_animated = pygame.image.load("res/menu/logo_anim.png").convert_alpha()
+
+    def update(self):
+        """Returns True if there was a change in the image."""
+        if not self.static:
+            return self.animate()
+
+    def animate(self):
+        """Animates the electricity effect of logo.
+        Returns True if there was an actual change in the image.
+        """
+        self.update_timer -= 1
+        if self.update_timer == 0:
+            self.rect.y = self.frame_current * self.rect.h
+            self.frame_current = (self.frame_current + 1) % self.frame_max
+            self.update_timer = self.update_timer_max
+            return True
+
+    @property
+    def static(self):
+        return self._static
+
+    @static.setter
+    def static(self, val):
+        self._static = val
+        if self._static:
+            self.image = self.image_static
+        else:
+            self.image = self.image_animated
+
+    def get_width(self):
+        return self.rect.width
+
+    def get_height(self):
+        return self.rect.height

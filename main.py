@@ -160,6 +160,7 @@ class ZeroGravitySoccer():
 
     def menu_state_loop(self, delta):
         """Game loop specifically during the start screen/main menu"""
+        self.startscreen.update()
         self.window_unscaled.blit(self.startscreen, (0,0))
 
     def quit(self):
