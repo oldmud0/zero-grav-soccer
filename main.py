@@ -104,7 +104,7 @@ class ZeroGravitySoccer():
         # Create player 2 ship and display if splitscreen is on
         if LOCAL_MP:
             self.game_disp2 = Display((DISP_WIDTH // 2, DISP_HEIGHT))
-            self.game_disp2.load_game(gamemode)
+            self.game_disp2.load_game(self.gamemode)
 
             ship2 = PlayerShip(1, self.gamemode)
             Map.objects.add(ship2)
