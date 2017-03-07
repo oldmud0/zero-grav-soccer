@@ -15,6 +15,7 @@ from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG, WINDOWED
 # Game states
 MENU = 0
 GAME = 1
+SP_TOURNEY = 2
 
 class ZeroGravitySoccer():
 
@@ -24,6 +25,14 @@ class ZeroGravitySoccer():
         """Initialize pygame and all objects/variables needed to begin the game."""
         pygame.init()
         self.clock = pygame.time.Clock()
+
+        # small hack: if windowed is not comfortable at max res,
+        # then override option and go straight to full-screen mode
+        res_x, res_y = pygame.display.list_modes()[0]
+        if res_x < DISP_WIDTH*1.6 or res_y < DISP_HEIGHT*1.6:
+            print("Windowed mode would barely fit in this monitor. Forcing full screen.")
+            global WINDOWED
+            WINDOWED = False
 
         # Main surface is here in case there are multiple smaller surfaces for splitscreen
         if WINDOWED:
@@ -81,6 +90,8 @@ class ZeroGravitySoccer():
                     raise Exception("Game is already in main game state!")
                 self.start_game()
                 self.state = GAME
+            elif event.type == events.END_GAME:
+                # When a match is over, do something else
             elif event.type == events.TO_MENU:
                 if self.state == MENU:
                     raise Exception("Game is already in main menu state!")

@@ -26,6 +26,8 @@ class SoccerGame:
 
     announce_win_timer = -1
 
+    self.winner = -1
+
     def __init__(self):
         self._ball = Ball()
         Map.current_map.objects.add(self._ball)
@@ -55,13 +57,16 @@ class SoccerGame:
             self._ball.respawn()
             if self.blue_team_score == self.win_score:
                 self.announce_win(0)
+                self.winner = 0
             elif self.red_team_score == self.win_score:
                 self.announce_win(1)
+                self.winner = 1
 
         if self.announce_win_timer > 0:
             self.announce_win_timer -= 1
         elif self.announce_win_timer == 0:
-            pygame.event.post(pygame.event.Event(events.TO_MENU, {"called_by": self}))
+            pygame.event.post(pygame.event.Event(events.END_GAME, {
+                "called_by": self, "outcome": self.winner}))
             self.announce_win_timer -= 1
 
     @property
