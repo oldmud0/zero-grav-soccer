@@ -33,6 +33,7 @@ class StartScreen(pygame.surface.Surface):
 
         self.logo_animation = True
         self.logo_animation_progress = 0
+        self.shake = False
 
         self.background = Stars(size)
 
@@ -73,8 +74,30 @@ class StartScreen(pygame.surface.Surface):
                 self.logo_animation_progress += 1/60
                 if self.logo_animation_progress >= 1:
                     self.logo_animation = False
+                    
+                    self.shake = True
+                    self.shake_progress = 0
+                    self.shake_alternator = 1
+                    self.scroll(-2)
+                    
                     self.logo.static = True
                 self.render()
+            if self.shake:
+                self.shake_progress += 1
+                if 0 <= self.shake_progress <= 20:
+                    if not self.shake_progress % 4:
+                        self.scroll(4 * self.shake_alternator)
+                        self.shake_alternator = -self.shake_alternator
+                elif 20 < self.shake_progress < 30:
+                    if not self.shake_progress % 2:
+                        self.scroll(3 * self.shake_alternator)
+                        self.shake_alternator = -self.shake_alternator
+                elif 30 < self.shake_progress < 40:
+                    if not self.shake_progress % 2:
+                        self.scroll(2 * self.shake_alternator)
+                        self.shake_alternator = -self.shake_alternator
+                elif self.shake_progress >= 40:
+                    self.shake = False
             # Animate logo if applicable
             if self.logo.update(): self.render()
 
