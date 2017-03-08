@@ -20,8 +20,8 @@ class Map(pygame.sprite.Sprite):
             collision_path = collision_path_ext[0] + "-collision" + collision_path_ext[1]
             print("Loading", collision_path)
         
-        try:
-            self.collision_map = pygame.image.load(collision_path).convert_alpha() # "Don't ask for permission. Ask for forgiveness instead"
+        try: # "Don't ask for permission. Ask for forgiveness instead"
+            self.collision_map = pygame.image.load(collision_path).convert_alpha()
             self.mask = pygame.mask.from_surface(self.collision_map)
         except pygame.error:
             print("Couldn't find a collision map. Generating one instead.")

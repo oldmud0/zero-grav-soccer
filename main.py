@@ -8,6 +8,7 @@ from soccer import SoccerGame
 from display import Display
 from scanlines import Scanlines
 from startscreen import StartScreen
+from sp_tourney import SinglePlayerTourney
 import events
 
 from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG, WINDOWED
@@ -70,38 +71,52 @@ class ZeroGravitySoccer():
     def pollEvents(self):
         """Process all (key) events passed to pygame."""
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:                       # Quit
                 self.stop = True
-            elif event.type == events.QUIT:
+            elif event.type == events.QUIT:                     # Quit
                 self.stop = True
-            elif event.type == events.COLLISION_UNSTUCK:
+
+            elif event.type == events.COLLISION_UNSTUCK:        # Unstuck
                 Entity.unstuck_all(Map.objects)
-            elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
-                if event.key == pygame.K_ESCAPE:
+
+            elif event.type in (pygame.KEYDOWN, pygame.KEYUP):  # Keypresses
+                if event.key == pygame.K_ESCAPE:                # Quit
                     self.stop = True
-                if self.state == MENU:
+                if self.state == MENU:                          # Menu inputs
                     self.startscreen.handle_inputs(event)
-                elif self.state == GAME:
+                elif self.state == GAME:                        # In-game inputs
                     self.game_disp.ent_in_control.handle_inputs(event, 0)
-                    if LOCAL_MP:
+                    if LOCAL_MP:                                # Player 2 as well
                         self.game_disp2.ent_in_control.handle_inputs(event, 1)
-            elif event.type == events.START_GAME:
+            
+            elif event.type == events.START_GAME:               # Start a game
                 if self.state == GAME:
                     raise Exception("Game is already in main game state!")
-                self.start_game()
-                self.state = GAME
-            elif event.type == events.END_GAME:
+                if event.mode == "sp_tourney":
+                    self.sp_manager = SinglePlayerTourney()
+                    self.state = SP_TOURNEY
+                elif event.mode == "vs_ai":
+                    self.start_game(event.map, vs_ai = True)
+                    self.state = GAME
+                else:
+                    self.start_game(event.map)
+                    self.state = GAME
+
+            elif event.type == events.END_GAME:                 # End a game
+                # Turn off the auto-unstuck
+                pygame.time.set_timer(events.COLLISION_UNSTUCK, 0)
                 # When a match is over, do something else
-            elif event.type == events.TO_MENU:
+
+                elif event.type == events.TO_MENU:                  # Go to menu
                 if self.state == MENU:
                     raise Exception("Game is already in main menu state!")
                 self.startscreen.reset()
                 self.state = MENU
 
-    def start_game(self):
+    def start_game(self, map, vs_ai = False):
         # Create the map
-        map_path = os.path.join("res", "soccer_arcade1_tilemap.png")
-        Map.current_map = Map(map_path)
+        map_path = os.path.join("res", map)
+        curr_map = Map.current_map = Map(map_path)
 
         # Start the gamemode
         self.gamemode = SoccerGame()
@@ -109,7 +124,7 @@ class ZeroGravitySoccer():
 
         # Create the ship
         ship = PlayerShip(0, self.gamemode)
-        Map.objects.add(ship)
+        curr_map.objects.add(ship)
         self.game_disp.ent_in_control = ship
 
         # Create player 2 ship and display if splitscreen is on

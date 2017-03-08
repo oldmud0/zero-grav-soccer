@@ -2,6 +2,7 @@ import pygame
 from button import Button
 import events
 from bg_stars import Stars
+from settings import VERSION
 
 class StartScreen(pygame.surface.Surface):
     """Main menu of the game"""
@@ -41,7 +42,7 @@ class StartScreen(pygame.surface.Surface):
 
         self.text_font = pygame.font.Font("res/gohufont-11.ttf", 11)
         self.text_copyright = self.text_font.render("Copyright (c) 2016-2017 Bennett Ramirez", False, (255, 255, 255))
-        self.text_version = self.text_font.render("Pre-alpha 0.1.2", False, (255, 255, 255))
+        self.text_version = self.text_font.render(VERSION, False, (255, 255, 255))
 
         self.render()
 
@@ -131,7 +132,10 @@ class StartScreen(pygame.surface.Surface):
         self.render()
 
     def start_game(self):
-        pygame.event.post(pygame.event.Event(events.START_GAME, {"called_by": self}))
+        pygame.event.post(pygame.event.Event(events.START_GAME, {
+            "called_by": self,
+            "mode": "sp_tourney"
+        }))
 
     def quit_game(self):
         pygame.event.post(pygame.event.Event(events.QUIT, {"called_by": self}))
