@@ -1,6 +1,6 @@
 {
-	"_description": "Icon position data for a 16-player bracket"
-	"levels": 4
+	"_description": "Icon position data for a 16-player bracket",
+	"levels": 4,
 	"level1":
 	[
 		[9, 15],
@@ -60,26 +60,26 @@
 		[216, 75],
 		[216, 123],
 		[216, 171]
-	]
+	],
 	"level3":
 	[
 		[102, 51],
 		[102, 147],
 		[216, 51],
 		[216, 147]
-	]
+	],
 	"level3_transition":
 	[
 		[110, 51],
 		[110, 147],
 		[209, 51],
 		[209, 147]
-	]
+	],
 	"level4":
 	[
 		[110, 99],
 		[209, 99]
-	]
+	],
 	"level4_transition":
 	[
 		[159, 99]

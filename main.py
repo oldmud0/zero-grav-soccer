@@ -1,4 +1,4 @@
-import pygame, os
+import pygame, os, events
 
 from entity import Entity
 from ship import Ship
@@ -16,11 +16,12 @@ from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG, WINDOWED
 # Game states
 MENU = 0
 GAME = 1
-SP_TOURNEY = 2
+SINGLEPLAYER = 2
 
 class ZeroGravitySoccer():
 
     stop = False
+    sp_manager = None
 
     def __init__(self):
         """Initialize pygame and all objects/variables needed to begin the game."""
@@ -88,30 +89,52 @@ class ZeroGravitySoccer():
                     self.game_disp.ent_in_control.handle_inputs(event, 0)
                     if LOCAL_MP:                                # Player 2 as well
                         self.game_disp2.ent_in_control.handle_inputs(event, 1)
+                    # Sinful debugging tactics
+                    if DEBUG:
+                        if event.key == pygame.K_MINUS:
+                            pygame.event.post(pygame.event.Event(events.END_GAME, {
+                                "called_by": "debug", "outcome": 0}))
+                        elif event.key == pygame.K_EQUALS:
+                            pygame.event.post(pygame.event.Event(events.END_GAME, {
+                                "called_by": "debug", "outcome": 1}))
             
             elif event.type == events.START_GAME:               # Start a game
                 if self.state == GAME:
                     raise Exception("Game is already in main game state!")
                 if event.mode == "sp_tourney":
-                    self.sp_manager = SinglePlayerTourney()
-                    self.state = SP_TOURNEY
+                    self.sp_manager = SinglePlayerTourney(self.window_unscaled.get_size())
+                    self.state = SINGLEPLAYER
                 elif event.mode == "vs_ai":
                     self.start_game(event.map, vs_ai = True)
+                    self.state = GAME
+                elif event.mode == "vs_local":
+                    self.start_game(event.map)
                     self.state = GAME
                 else:
                     self.start_game(event.map)
                     self.state = GAME
 
             elif event.type == events.END_GAME:                 # End a game
+                if self.state != GAME:
+                    raise Exception("Can't end game, because we aren't in the game state!")
                 # Turn off the auto-unstuck
                 pygame.time.set_timer(events.COLLISION_UNSTUCK, 0)
-                # When a match is over, do something else
+                # Check if we're supposed to go to singleplayer
+                if self.sp_manager is not None:
+                    self.sp_manager.handover(event.outcome)
+                    self.state = SINGLEPLAYER
+                else:
+                   self.to_menu()
 
-                elif event.type == events.TO_MENU:                  # Go to menu
+            elif event.type == events.TO_MENU:                  # Go to menu
                 if self.state == MENU:
                     raise Exception("Game is already in main menu state!")
-                self.startscreen.reset()
-                self.state = MENU
+                self.to_menu()
+
+    def to_menu(self):
+        del self.sp_manager
+        self.startscreen.reset()
+        self.state = MENU
 
     def start_game(self, map, vs_ai = False):
         # Create the map
@@ -156,6 +179,8 @@ class ZeroGravitySoccer():
                 self.menu_state_loop(delta)
             elif self.state == GAME:
                 self.game_state_loop(delta)
+            elif self.state == SINGLEPLAYER:
+                self.sp_state_loop(delta)
             else:
                 raise Exception("Unknown game state!")
 
@@ -183,6 +208,13 @@ class ZeroGravitySoccer():
 
             # Draw separating line
             pygame.draw.line(self.window_unscaled, (0,0,0), (DISP_WIDTH // 2 - 1, 0), (DISP_WIDTH // 2 - 1, DISP_HEIGHT - 1), 3)
+
+    def sp_state_loop(self, delta):
+        """Game loop specifically during the (cinematic) scenes handled by the
+        singleplayer manager (tourney mode, etc.)
+        """
+        scene = self.sp_manager.update()
+        self.window_unscaled.blit(scene, (0,0))
 
     def menu_state_loop(self, delta):
         """Game loop specifically during the start screen/main menu"""

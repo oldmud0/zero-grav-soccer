@@ -26,7 +26,7 @@ class SoccerGame:
 
     announce_win_timer = -1
 
-    self.winner = -1
+    winner = -1
 
     def __init__(self):
         self._ball = Ball()
@@ -65,6 +65,7 @@ class SoccerGame:
         if self.announce_win_timer > 0:
             self.announce_win_timer -= 1
         elif self.announce_win_timer == 0:
+            # End the game
             pygame.event.post(pygame.event.Event(events.END_GAME, {
                 "called_by": self, "outcome": self.winner}))
             self.announce_win_timer -= 1
@@ -141,5 +142,12 @@ class SoccerGame:
 
     def announce_win(self, team):
         """Announce the winning team."""
+        if self.announce_win_timer > 0:
+            self.cancel_announce_win()
         self.hud_win.show(team)
         self.announce_win_timer = 360
+
+    def cancel_announce_win(self):
+        """Cancel the win announcement."""
+        self.hud_win.hide()
+        self.announce_win_timer = -1

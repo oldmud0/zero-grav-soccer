@@ -2,7 +2,7 @@ import pygame
 from button import Button
 import events
 from bg_stars import Stars
-from settings import VERSION
+from settings import DEBUG, VERSION
 
 class StartScreen(pygame.surface.Surface):
     """Main menu of the game"""
@@ -36,13 +36,13 @@ class StartScreen(pygame.surface.Surface):
         self.logo_animation_progress = 0
         self.shake = False
 
-        self.background = Stars(size)
+        self.background = Stars(size, True)
 
         self.instructions = pygame.image.load("res/menu/instructions.png").convert()
 
         self.text_font = pygame.font.Font("res/gohufont-11.ttf", 11)
         self.text_copyright = self.text_font.render("Copyright (c) 2016-2017 Bennett Ramirez", False, (255, 255, 255))
-        self.text_version = self.text_font.render(VERSION, False, (255, 255, 255))
+        self.text_version = self.text_font.render(VERSION + (" [debug]" if DEBUG else ""), False, (255, 255, 255))
 
         self.render()
 
@@ -71,6 +71,7 @@ class StartScreen(pygame.surface.Surface):
         if self.instructions_visible:
             pass
         else:
+            self.background.animate()
             if self.logo_animation:
                 self.logo_animation_progress += 1/60
                 if self.logo_animation_progress >= 1:
@@ -81,8 +82,8 @@ class StartScreen(pygame.surface.Surface):
                     self.shake_alternator = 1
                     self.scroll(-2)
                     
-                    self.logo.static = True
-                self.render()
+                    self.logo.static = False
+                #self.render()
             if self.shake:
                 self.shake_progress += 1
                 if 0 <= self.shake_progress <= 20:
@@ -100,7 +101,9 @@ class StartScreen(pygame.surface.Surface):
                 elif self.shake_progress >= 40:
                     self.shake = False
             # Animate logo if applicable
-            if self.logo.update(): self.render()
+            #if self.logo.update(): self.render()
+            self.logo.update()
+            self.render()
 
     def render(self):
         """Redraw start screen whenever it changes."""

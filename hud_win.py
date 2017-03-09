@@ -19,6 +19,10 @@ class HUDWinMessage(HUDElement):
         self.timer = 360
         self.visible = True
 
+    def hide(self):
+        self.timer = -1
+        self.visible = False
+
     def action(self):
         if self.timer > 0:
             self.timer -= 1

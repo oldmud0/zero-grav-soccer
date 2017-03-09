@@ -29,7 +29,7 @@ class Map(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect()
 
-        self.background = Stars(self.rect.size)
+        self.background = Stars(self.rect.size, False)
 
         self.collision_rects = []
         rects_file_path_ext = os.path.splitext(path)
@@ -43,4 +43,4 @@ class Map(pygame.sprite.Sprite):
     def action(self, delta):
         for object in self.objects:
             object.action(delta)
-        self.background.update()
+        #self.background.update()
