@@ -24,6 +24,8 @@ Source code
 -----------
 
 Source code is available inside the "Source code" folder in the data folder.
+To run the game from source, please copy the "res" folder from the data folder to the source folder and run `main.py`.
+Be sure to install Pygame beforehand with `pip install pygame` in an administrator command prompt.
 
 A constantly updated version is also available at:
 https://github.com/oldmud0/zero-gravity-soccer
