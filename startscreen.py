@@ -11,6 +11,7 @@ class StartScreen(pygame.surface.Surface):
     _button_selected = 0
 
     instructions_visible = False
+    instructions_splitscreen = False
 
     def __init__(self, size):
         pygame.surface.Surface.__init__(self, size)
@@ -21,9 +22,13 @@ class StartScreen(pygame.surface.Surface):
                 "res/menu/btn_play_on.png",
                 self.show_instructions, (size[0] // 2, size[1] // 2 + 30)),
             Button(
+                "res/menu/btn_vs_local_off.png",
+                "res/menu/btn_vs_local_on.png",
+                self.show_instructions_splitscreen, (size[0] // 2, size[1] // 2 + 80)),
+            Button(
                 "res/menu/btn_quit_off.png",
                 "res/menu/btn_quit_on.png",
-                self.quit_game, (size[0] // 2, size[1] // 2 + 80))
+                self.quit_game, (size[0] // 2, size[1] // 2 + 130))
         ]
         for button in self.button_list:
             self.button_group.add(button)
@@ -39,6 +44,7 @@ class StartScreen(pygame.surface.Surface):
         self.background = Stars(size, True)
 
         self.instructions = pygame.image.load("res/menu/instructions.png").convert()
+        self.instructions_splitscreen = pygame.image.load("res/menu/instructions_splitscreen.png").convert()
 
         self.text_font = pygame.font.Font("res/gohufont-11.ttf", 11)
         self.text_copyright = self.text_font.render("Copyright (c) 2016-2017 Bennett Ramirez", False, (255, 255, 255))
@@ -50,12 +56,15 @@ class StartScreen(pygame.surface.Surface):
         if event.type == pygame.KEYDOWN:
             if self.instructions_visible:
                 if event.key == pygame.K_RETURN:
-                    self.start_game()
+                    if self.instructions_splitscreen:
+                        self.start_game_splitscreen()
+                    else:
+                        self.start_game()
             else:
                 # Select buttons
                 inc = False
-                if event.key == pygame.K_UP: inc = 1
-                elif event.key == pygame.K_DOWN: inc = -1
+                if event.key == pygame.K_UP: inc = -1
+                elif event.key == pygame.K_DOWN: inc = 1
                 if inc:
                     self.button_selected.deselect()
                     self._button_selected = (self._button_selected + inc) % len(self.button_list)
@@ -109,7 +118,10 @@ class StartScreen(pygame.surface.Surface):
         """Redraw start screen whenever it changes."""
         self.fill((0,0,0))
         if self.instructions_visible:
-            self.blit(self.instructions, (0,0))
+            if self.instructions_splitscreen:
+                self.blit(self.instructions_splitscreen, (0,0))
+            else:
+                self.blit(self.instructions, (0,0))
         else:
             self.blit(self.background, (0,0))
             self.button_group.draw(self)
@@ -125,6 +137,7 @@ class StartScreen(pygame.surface.Surface):
             else:
                 self.blit(self.logo.image, ((self.get_width() - self.logo.get_width()) // 2, round(self.get_height() * .2)),
                         self.logo.rect)
+
             self.blit(self.text_copyright, ((self.get_width() - self.text_copyright.get_width(), \
                     self.get_height() - self.text_copyright.get_height())))
             self.blit(self.text_version, ((0, \
@@ -132,12 +145,25 @@ class StartScreen(pygame.surface.Surface):
 
     def show_instructions(self):
         self.instructions_visible = True
+        self.instructions_splitscreen = False
+        self.render()
+
+    def show_instructions_splitscreen(self):
+        self.instructions_spliscreen = True
+        self.instructions_visible = True
         self.render()
 
     def start_game(self):
         pygame.event.post(pygame.event.Event(events.START_GAME, {
             "called_by": self,
             "mode": "sp_tourney"
+        }))
+    
+    def start_game_splitscreen(self):
+        pygame.event.post(pygame.event.Event(events.START_GAME, {
+            "called_by": self,
+            "mode": "vs_local",
+            "map": "soccer_arcade1_tilemap.png"
         }))
 
     def quit_game(self):
