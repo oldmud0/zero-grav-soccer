@@ -11,7 +11,7 @@ from startscreen import StartScreen
 from sp_tourney import SinglePlayerTourney
 import events
 
-from settings import DISP_WIDTH, DISP_HEIGHT, LOCAL_MP, DEBUG, WINDOWED
+from settings import DISP_WIDTH, DISP_HEIGHT, DEBUG, WINDOWED
 
 # Game states
 MENU = 0
@@ -52,11 +52,6 @@ class ZeroGravitySoccer():
         # Set window icon
         pygame.display.set_icon(pygame.image.load(os.path.join("res", "icon.png")).convert_alpha())
 
-        # Make screen 1 half-sized instead of full-sized if splitscreen is on
-        if LOCAL_MP:
-            self.game_disp = Display((DISP_WIDTH // 2, DISP_HEIGHT))
-        else:
-            self.game_disp = Display((DISP_WIDTH, DISP_HEIGHT))
 
         # Set window title
         pygame.display.set_caption("Zero-Gravity Soccer")
@@ -89,7 +84,7 @@ class ZeroGravitySoccer():
                     self.sp_manager.handle_inputs(event)        # Singleplayer manager inputs
                 elif self.state == GAME:                        # In-game inputs
                     self.game_disp.ent_in_control.handle_inputs(event, 0)
-                    if LOCAL_MP:                                # Player 2 as well
+                    if self.splitscreen:                        # Player 2 as well
                         self.game_disp2.ent_in_control.handle_inputs(event, 1)
                     # Sinful debugging tactics
                     if DEBUG:
@@ -138,12 +133,20 @@ class ZeroGravitySoccer():
         self.state = MENU
 
     def start_game(self, map, vs_ai = False):
+        self.splitscreen = not vs_ai
         # Create the map
         map_path = os.path.join("res", map)
         curr_map = Map.current_map = Map(map_path)
 
         # Start the gamemode
         self.gamemode = SoccerGame()
+
+        # Make screen 1 half-sized instead of full-sized if splitscreen is on
+        if self.splitscreen:
+            self.game_disp = Display((DISP_WIDTH // 2, DISP_HEIGHT))
+        else:
+            self.game_disp = Display((DISP_WIDTH, DISP_HEIGHT))
+
         self.game_disp.load_game(self.gamemode)
 
         # Create the ship
@@ -152,7 +155,7 @@ class ZeroGravitySoccer():
         self.game_disp.ent_in_control = ship
 
         # Create player 2 ship and display if splitscreen is on
-        if LOCAL_MP:
+        if self.splitscreen:
             self.game_disp2 = Display((DISP_WIDTH // 2, DISP_HEIGHT))
             self.game_disp2.load_game(self.gamemode)
 
@@ -212,7 +215,7 @@ class ZeroGravitySoccer():
 
         self.window_unscaled.blit(self.game_disp.surface, (0,0))
 
-        if LOCAL_MP:
+        if self.splitscreen:
             self.game_disp2.update()
             self.game_disp2.render()
             self.window_unscaled.blit(self.game_disp2.surface, (DISP_WIDTH // 2 - 1, 0))
