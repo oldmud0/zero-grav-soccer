@@ -59,7 +59,7 @@ class ZeroGravitySoccer():
             self.game_disp = Display((DISP_WIDTH, DISP_HEIGHT))
 
         # Set window title
-        pygame.display.set_caption("Soccer in space!")
+        pygame.display.set_caption("Zero-Gravity Soccer")
 
         # Create main menu
         self.startscreen = StartScreen(self.window_unscaled.get_size())
@@ -85,6 +85,8 @@ class ZeroGravitySoccer():
                     self.stop = True
                 if self.state == MENU:                          # Menu inputs
                     self.startscreen.handle_inputs(event)
+                elif self.state == SINGLEPLAYER:
+                    self.sp_manager.handle_inputs(event)        # Singleplayer manager inputs
                 elif self.state == GAME:                        # In-game inputs
                     self.game_disp.ent_in_control.handle_inputs(event, 0)
                     if LOCAL_MP:                                # Player 2 as well
