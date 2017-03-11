@@ -254,7 +254,7 @@ class ContinueScreen(pygame.surface.Surface):
         self.lives = lives
         self.callback = callback
 
-        self.text_font = pygame.font.Font(os.path.join("res", "gohufont-11.ttf"), 22) # TODO: centralize font stuff
+        self.text_font = pygame.font.Font(os.path.join("res", "gohufont-11.ttf"), 88) # TODO: centralize font stuff
         self._redraw()
 
     def update(self):
@@ -276,12 +276,16 @@ class ContinueScreen(pygame.surface.Surface):
         self.blit(self.text_continue_timer, r_tct)
 
     def handle_inputs(self, event):
-        print("Things are happening!!!!")
-        if event.key == pygame.ENTER:
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             self.lives -= 1
             self.callback(True)
+        elif event.type == pygame.KEYUP:
+            # Ignore key up events
+            pass
         else:
             self.continue_timer -= 1
+            self._redraw()
+            self.continue_tick_timer = self.continue_tick_timer_max
 
     def render(self):
         pass
