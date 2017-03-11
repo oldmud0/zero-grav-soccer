@@ -4,7 +4,6 @@ from settings import DEBUG
 
 class Map(pygame.sprite.Sprite):
     current_map = None
-    objects = pygame.sprite.Group()
     background = None
 
     def __init__(self, path, collision_path = None):
@@ -12,6 +11,7 @@ class Map(pygame.sprite.Sprite):
                 
         print("Loading", path) # Debugging purposes only
         self.image = pygame.image.load(path).convert()
+        self.objects = pygame.sprite.Group()
         
         # Find or generate a collision map.
         if collision_path == None:

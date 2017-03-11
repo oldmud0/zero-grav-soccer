@@ -78,7 +78,7 @@ class ZeroGravitySoccer():
                 self.stop = True
 
             elif event.type == events.COLLISION_UNSTUCK:        # Unstuck
-                Entity.unstuck_all(Map.objects)
+                Entity.unstuck_all(Map.current_map.objects)
 
             elif event.type in (pygame.KEYDOWN, pygame.KEYUP):  # Keypresses
                 if event.key == pygame.K_ESCAPE:                # Quit
@@ -119,8 +119,7 @@ class ZeroGravitySoccer():
             elif event.type == events.END_GAME:                 # End a game
                 if self.state != GAME:
                     raise Exception("Can't end game, because we aren't in the game state!")
-                # Turn off the auto-unstuck
-                pygame.time.set_timer(events.COLLISION_UNSTUCK, 0)
+                self.end_game()
                 # Check if we're supposed to go to singleplayer
                 if self.sp_manager is not None:
                     self.sp_manager.handover(event.outcome)
@@ -158,10 +157,20 @@ class ZeroGravitySoccer():
             self.game_disp2.load_game(self.gamemode)
 
             ship2 = PlayerShip(1, self.gamemode)
-            Map.objects.add(ship2)
+            curr_map.objects.add(ship2)
             self.game_disp2.ent_in_control = ship2
 
         pygame.time.set_timer(events.COLLISION_UNSTUCK, 1000)
+
+    def end_game(self):
+        """Gracefully end the game."""
+        # Turn off the auto-unstuck
+        pygame.time.set_timer(events.COLLISION_UNSTUCK, 0)
+
+        # Dereference all the game variables so they can be GC'd
+        # (free memory!)
+        del self.gamemode
+        del Map.current_map
 
     def loop(self):
         """Primary game loop."""
