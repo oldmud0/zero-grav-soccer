@@ -128,7 +128,11 @@ class ZeroGravitySoccer():
                 self.to_menu()
 
     def to_menu(self):
-        del self.sp_manager
+		try:
+			del self.sp_manager
+		except AttributeError:
+			pass
+
         self.startscreen.reset()
         self.state = MENU
 
