@@ -19,4 +19,4 @@ COLLISION_STUCK_THRESHOLD = 35
 
 DEBUG = True
 
-VERSION = "Pre-alpha 0.1.2"
+VERSION = "Pre-alpha 0.3"
