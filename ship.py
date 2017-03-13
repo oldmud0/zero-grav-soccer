@@ -60,6 +60,7 @@ class Ship(Entity):
         
         self.collide_sound = pygame.mixer.Sound(os.path.join("res", "ship_bump.wav"))
         self.collide_with_ship_sound = pygame.mixer.Sound(os.path.join("res", "ship_ship_collision.wav"))
+        self.collision_last_frame = False
     
     def action(self, delta):
         self.move(delta)
