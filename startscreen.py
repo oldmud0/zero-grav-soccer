@@ -66,10 +66,8 @@ class StartScreen(pygame.surface.Surface):
                 if event.key == pygame.K_UP: inc = -1
                 elif event.key == pygame.K_DOWN: inc = 1
                 if inc:
-                    self.button_selected.deselect()
-                    self._button_selected = (self._button_selected + inc) % len(self.button_list)
-                    self.button_selected.select()
-                    self.render()
+                    btn = (self._button_selected + inc) % len(self.button_list)
+                    self.button_selected = btn
                 if event.key == pygame.K_RETURN:
                     self.button_selected.action()
 
@@ -171,13 +169,22 @@ class StartScreen(pygame.surface.Surface):
 
     def reset(self):
         """Prepare menu for redisplay due to a change in game state"""
-        self._button_selected = 0
+        self.button_selected = 0
         self.instructions_visible = False
         self.render()
 
     @property
     def button_selected(self):
         return self.button_list[self._button_selected]
+
+    @button_selected.setter
+    def button_selected(self, id):
+        if not 0 <= id <= len(self.button_list):
+            raise ValueError("Selected button is out of bounds!")
+        self.button_selected.deselect()
+        self._button_selected = id
+        self.button_selected.select()
+        self.render()
 
 class StartScreenLogo(pygame.sprite.Sprite):
 

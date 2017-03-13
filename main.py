@@ -26,6 +26,7 @@ class ZeroGravitySoccer():
 
     def __init__(self):
         """Initialize pygame and all objects/variables needed to begin the game."""
+        pygame.mixer.pre_init(44100, -16, 1, 512)
         pygame.init()
         self.clock = pygame.time.Clock()
 
@@ -74,7 +75,10 @@ class ZeroGravitySoccer():
                 self.stop = True
 
             elif event.type == events.COLLISION_UNSTUCK:        # Unstuck
-                Entity.unstuck_all(Map.current_map.objects)
+                if self.state == GAME:
+                    Entity.unstuck_all(Map.current_map.objects)
+                elif DEBUG:
+                    print("Oops, tried to unstuck while out of game state.")
 
             elif event.type in (pygame.KEYDOWN, pygame.KEYUP):  # Keypresses
                 if event.key == pygame.K_ESCAPE:                # Quit
