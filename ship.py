@@ -11,6 +11,9 @@ class Ship(Entity):
     
     path_collide_mask = os.path.join("res", "ship-collision.png")
 
+    default_acceleration = SHIP_ACCELERATION
+    acceleration = SHIP_ACCELERATION
+
     collision_sound_cooldown = 30
 
     def __init__(self, team, gamemode):
@@ -76,8 +79,8 @@ class Ship(Entity):
             self.collision_last_frame = False
 
         if self.thrust:
-            self.vx += -SHIP_ACCELERATION*math.sin(math.radians(self.rot))
-            self.vy += -SHIP_ACCELERATION*math.cos(math.radians(self.rot))
+            self.vx += -self.acceleration*math.sin(math.radians(self.rot))
+            self.vy += -self.acceleration*math.cos(math.radians(self.rot))
             if self.current_sprite != self.firing_sprite:
                 self.set_sprite(self.firing_sprite)
         else:
@@ -96,8 +99,10 @@ class Ship(Entity):
             self.vx *= SHIP_BRAKING
             self.vy *= SHIP_BRAKING
         
-        if self.x < 0 or self.x > Map.current_map.rect.w or self.y < 0 or self.y > Map.current_map.rect.h:
+        if self.x < 0 or self.x > Map.current_map.rect.w:
             self.vx *= -1
+        if self.y < 0 or self.y > Map.current_map.rect.h:
+            self.vy *= -1
 
         if self.collision_ignore:
             self.invuln_timer -= 1

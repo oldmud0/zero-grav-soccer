@@ -3,6 +3,7 @@ import pygame, os, events
 from entity import Entity
 from ship import Ship
 from player_ship import PlayerShip
+from ai_ship import AIShip
 from map import Map
 from soccer import SoccerGame
 from display import Display
@@ -171,6 +172,11 @@ class ZeroGravitySoccer():
             ship2 = PlayerShip(1, self.gamemode)
             curr_map.objects.add(ship2)
             self.game_disp2.ent_in_control = ship2
+
+        # Create AI ship if vs_ai
+        if vs_ai:
+            ship_ai = AIShip(1, self.gamemode)
+            curr_map.objects.add(ship_ai)
 
         # Create global HUD
         self.global_hud = GlobalHUD(self.window_unscaled.get_size(), self.gamemode)

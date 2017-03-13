@@ -1,3 +1,7 @@
+import math
+
+from settings import DEBUG
+
 class SoccerAI:
     """The embodiment of a simple soccer AI.
     The bot has a difficulty slider and can do
@@ -30,8 +34,30 @@ class SoccerAI:
     
     difficulty = 1
     
-    def __init__(self):
-        pass
-        
+    def __init__(self, ship, gamemode):
+        self.ship = ship
+        self.gamemode = gamemode
+
     def think(self):
-        pass
+        """Process stimulus and determine the correct
+        inputs during this interval."""
+
+        objective = self.gamemode.objective
+        obj_x, obj_y = objective.x, objective.y
+        pos_x, pos_y = self.ship.x, self.ship.y
+
+        # Get ship to point toward ball within margin of error
+        ang_err = .2
+        ball_angle = (math.degrees((math.atan2(-(obj_y - pos_y), obj_x - pos_x)) % (2 * math.pi))) % 360
+        diff = ((ball_angle - self.ship.rot) + 90) % 360 - 180
+        #print("[ship ang]", self.ship.rot)
+        #print("[ball ang]", ball_angle)
+        #print("[diff]", diff)
+        self.ship.vrot = self.ship.vrot / 2 + diff / 6
+
+        accel = self.ship.default_acceleration * math.sqrt( (obj_x - pos_x) ** 2 + (obj_y - pos_y) ** 2 )
+        if accel > 1:
+            self.ship.thrust = True
+            self.ship.acceleration = min(self.ship.default_acceleration, accel)
+        else:
+            self.ship.thrust = False
