@@ -78,12 +78,18 @@ class SoccerGame:
     def new_hud(self, width, height, camera):
         """Return the HUD elements suggested for the gamemode."""
         elements = pygame.sprite.Group()
+        #elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
+        return elements
+
+    def new_global_hud(self, width, height):
+        """Return the HUD elements for a global HUD
+        as suggested by the gamemode."""
+        elements = pygame.sprite.Group()
         elements.add(HUDScoreElement((round(width * .33), 35), lambda: self.blue_team_score))
         elements.add(HUDScoreElement((round(width * .66), 35), lambda: self.red_team_score))
         
         self.hud_win = HUDWinMessage((width // 2 - 100, height // 2))
         elements.add(self.hud_win)
-        #elements.add(HUDArrowElement(camera, lambda: self._ball.rect.center, False))
         return elements
 
     def respawn_all(self):

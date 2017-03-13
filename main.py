@@ -9,6 +9,7 @@ from display import Display
 from scanlines import Scanlines
 from startscreen import StartScreen
 from sp_tourney import SinglePlayerTourney
+from hud_global import GlobalHUD
 import events
 
 from settings import DISP_WIDTH, DISP_HEIGHT, DEBUG, WINDOWED
@@ -167,6 +168,9 @@ class ZeroGravitySoccer():
             curr_map.objects.add(ship2)
             self.game_disp2.ent_in_control = ship2
 
+        # Create global HUD
+        self.global_hud = GlobalHUD(self.window_unscaled.get_size(), self.gamemode)
+
         pygame.time.set_timer(events.COLLISION_UNSTUCK, 1000)
 
     def end_game(self):
@@ -226,6 +230,10 @@ class ZeroGravitySoccer():
 
             # Draw separating line
             pygame.draw.line(self.window_unscaled, (0,0,0), (DISP_WIDTH // 2 - 1, 0), (DISP_WIDTH // 2 - 1, DISP_HEIGHT - 1), 3)
+
+        self.global_hud.update()
+        self.global_hud.render()
+        self.window_unscaled.blit(self.global_hud, (0,0))
 
     def sp_state_loop(self, delta):
         """Game loop specifically during the (cinematic) scenes handled by the
