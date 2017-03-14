@@ -56,7 +56,7 @@ class SoccerAI:
         self.ship.vrot = self.ship.vrot / 2 + diff / 6
 
         accel = self.ship.default_acceleration * math.sqrt( (obj_x - pos_x) ** 2 + (obj_y - pos_y) ** 2 )
-        if accel > 1:
+        if accel > 1 and objective.vx + objective.vy < 3:
             self.ship.thrust = True
             self.ship.acceleration = min(self.ship.default_acceleration, accel)
         else:

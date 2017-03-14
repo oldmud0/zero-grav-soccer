@@ -192,6 +192,8 @@ class ZeroGravitySoccer():
         # (free memory!)
         del self.gamemode
         del Map.current_map
+        del self.game_disp
+        del self.global_hud
 
     def loop(self):
         """Primary game loop."""
