@@ -34,3 +34,18 @@ Performance
 -----------
 
 If you are playing on a laptop and experiencing sluggish performance, please ensure that you are not running on battery power and that the power plan is set to "Balanced" instead of "Power saver".
+
+Credits
+-------
+All visual assets were created originally using Aseprite. Gohufont was created by Hugo Chargois.
+
+Sound effects were created using Sfxr and Bfxr. The goal sound is courtesy of Ben Aksoy's old Ace of Spades game.
+
+Music credits:
+Chiptune - Under my Bed
+Fishyash - Coasting Into the Sunset
+Kulor - Oceanfloor
+Ozzed - Human Factory Reset
+Ozzed - Rymdfighter III
+Ozzed - Shell Shock Shake
+Ozzed - Shingle Tingle
