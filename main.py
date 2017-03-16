@@ -144,6 +144,10 @@ class ZeroGravitySoccer():
         self.state = MENU
 
     def start_game(self, map, vs_ai = False, handle_music = False):
+        """Start a game of soccer.
+        vs_ai: whether or not to include an AI enemy
+        handle_music: whether or not a random track should be played here
+        """
         self.splitscreen = not vs_ai
         # Create the map
         map_path = os.path.join("res", map)
@@ -178,6 +182,9 @@ class ZeroGravitySoccer():
         if vs_ai:
             ship_ai = AIShip(1, self.gamemode)
             curr_map.objects.add(ship_ai)
+
+        if handle_music:
+            music_handler.play_level_track(-1)
 
         # Create global HUD
         self.global_hud = GlobalHUD(self.window_unscaled.get_size(), self.gamemode)

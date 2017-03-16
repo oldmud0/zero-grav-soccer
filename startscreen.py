@@ -1,4 +1,4 @@
-import pygame
+import os, pygame
 from button import Button
 import events
 from bg_stars import Stars
@@ -50,6 +50,9 @@ class StartScreen(pygame.surface.Surface):
         self.text_copyright = self.text_font.render("Copyright (c) 2016-2017 Bennett Ramirez", False, (255, 255, 255))
         self.text_version = self.text_font.render(VERSION + (" [debug]" if DEBUG else ""), False, (255, 255, 255))
 
+        self.button_select_sound = pygame.mixer.Sound(os.path.join("res", "sound", "button_select.wav"))
+        self.button_push_sound = pygame.mixer.Sound(os.path.join("res", "sound", "button_push.wav"))
+
         self.render()
 
     def handle_inputs(self, event):
@@ -68,7 +71,9 @@ class StartScreen(pygame.surface.Surface):
                 if inc:
                     btn = (self._button_selected + inc) % len(self.button_list)
                     self.button_selected = btn
+                    self.button_select_sound.play()
                 if event.key == pygame.K_RETURN:
+                    self.button_push_sound.play()
                     self.button_selected.action()
 
     def update(self):
