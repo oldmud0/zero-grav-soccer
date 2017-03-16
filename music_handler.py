@@ -16,7 +16,8 @@ tracks = {
     ],
     "bracket":       music_file("kulor__oceanfloor.ogg"),
     "continue":      music_file("chiptune__under_my_bed.ogg"),
-    "game_over":     music_file("gameover.wav")
+    "game_over":     music_file("gameover.wav"),
+    "congrats":      music_file("fishyash__coasting_into_the_sunset.ogg")
 }
 
 def play_track(name):

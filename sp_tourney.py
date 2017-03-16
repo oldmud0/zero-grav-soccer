@@ -346,6 +346,7 @@ class Congratulations(pygame.surface.Surface):
         pygame.surface.Surface.__init__(self, size)
         self.image = pygame.image.load(self.image_path)
         self.blit(self.image, pygame.Rect((0, 0), size))
+        music_handler.play_track("congrats")
 
     def update(self):
         self.timer -= 1
