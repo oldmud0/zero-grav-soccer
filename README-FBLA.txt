@@ -3,7 +3,7 @@ Zero-Gravity Soccer
 
 This game uses Python 3.6 and Pygame 1.9.3; however, the game has been packaged in standalone form, so no installation of any libraries is required.
 
-To start the game manually (e.g. if the shortcut does not work), enter the data folder and run zgsoccer.exe.
+To start the game manually (e.g. if the shortcut does not work), enter the data folder and run zgsoccer.exe. Use the arrow keys to navigate the menu.
 
 Controls
 --------
