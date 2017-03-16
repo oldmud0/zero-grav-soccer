@@ -34,6 +34,9 @@ class Ball(Entity):
 			self.y = Map.current_map.rect.h
 		if self.y > Map.current_map.rect.h:
 			self.y = 0
+
+                # Clamp insane angular velocity, to prevent insane things from happening
+		self.vrot = self.vrot % 360
 	
 	def collision_detect_others(self):
 		objects = list(Map.current_map.objects)
