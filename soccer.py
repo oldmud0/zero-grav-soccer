@@ -15,10 +15,8 @@ class SoccerGame:
     """
 
     blue_team_score = 0
-    blue_team_ships = []
 
     red_team_score = 0
-    red_team_ships = []
 
     win_score = 3
 
@@ -32,6 +30,8 @@ class SoccerGame:
         self._ball = Ball()
         Map.current_map.objects.add(self._ball)
         self.goal_sound = pygame.mixer.Sound(os.path.join("res", "goal.wav"))
+        self.blue_team_ships = []
+        self.red_team_ships = []
 
     def get_spawn_pos(self, ship):
         """Return x, y, angle of the spawn position for a ship given their team."""
