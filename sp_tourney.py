@@ -1,4 +1,4 @@
-import pygame, os, events, json, random
+import pygame, os, events, json, random, music_handler
 
 from settings import DEBUG
 
@@ -30,11 +30,13 @@ class SinglePlayerTourney:
         self.current_level += 1
         if DEBUG: print("Going to level", self.current_level)
         self.bracket.transition(self.current_level, True)
+        music_handler.play_track("bracket")
         self._wait()
         
     def redo_level(self):
         """Intended to be called from the Continue screen."""
         self.current_scene = self.bracket
+        music_handler.play_track("bracket")
         self._wait()
 
     def _wait(self):
@@ -42,13 +44,16 @@ class SinglePlayerTourney:
         self.waiting = True
 
     def _start_level(self):
+        music_handler.fadeout()
         if self.current_level == len(self.level_maps):
             self.current_scene = Congratulations(self.size)
         else:
+            music_handler.play_level_track(self.current_level)
             pygame.event.post(pygame.event.Event(events.START_GAME, {
                 "called_by": self,
                 "map": self.level_maps[self.current_level],
-                "mode": "vs_ai"
+                "mode": "vs_ai",
+                "music": False
             }))
 
     def handover(self, outcome):
@@ -64,7 +69,9 @@ class SinglePlayerTourney:
                 self._wait()
 
     def continue_screen_callback(self, will_continue):
+        music_handler.fadeout()
         if will_continue:
+            self.lives_left -= 1
             self.redo_level()
         else:
             self.current_scene = GameOver(self.size)
@@ -235,14 +242,14 @@ class Bracket(pygame.surface.Surface):
 class ContinueScreen(pygame.surface.Surface):
     """Continue?"""
 
-    continue_sound = None # todo: haven't added one, yet
-
     continue_image_path = os.path.join("res", "cinematic", "continue.png")
 
     continue_timer = 10
 
     continue_tick_timer = 90
     continue_tick_timer_max = 90
+
+    will_continue = False
 
     def __init__(self, size, lives, callback):
         """Callback indicates what function will receive the response
@@ -254,7 +261,11 @@ class ContinueScreen(pygame.surface.Surface):
         self.lives = lives
         self.callback = callback
 
-        self.text_font = pygame.font.Font(os.path.join("res", "gohufont-11.ttf"), 88) # TODO: centralize font stuff
+        music_handler.play_track("continue")
+
+        # TODO: centralize font stuff
+        self.text_font_huge = pygame.font.Font(os.path.join("res", "gohufont-11.ttf"), 88)
+        self.text_font_small = pygame.font.Font(os.path.join("res", "gohufont-11.ttf"), 44)
         self._redraw()
 
     def update(self):
@@ -262,23 +273,32 @@ class ContinueScreen(pygame.surface.Surface):
             self.continue_tick_timer -= 1
             if self.continue_tick_timer == 0:
                 self.continue_timer -= 1
-                self.continue_tick_timer = self.continue_tick_timer_max
+                if self.will_continue:
+                    self.callback(True)
+                else:
+                    self.continue_tick_timer = self.continue_tick_timer_max
                 self._redraw()
         else:
             self.callback(False)
 
     def _redraw(self):
-        self.text_continue_timer = self.text_font.render(str(self.continue_timer), False, (255, 255, 255))
+        self.text_continue_timer = self.text_font_huge.render(str(self.continue_timer), False, (255, 255, 255))
         r_tct = pygame.Rect((0, 0), self.text_continue_timer.get_size())
         r_tct.center = self.size[0] // 2, self.size[1] // 2
 
+        self.text_lives = self.text_font_small.render(str(self.lives), False, (255, 255, 255))
+        r_tl = pygame.Rect((0,0), self.text_lives.get_size())
+        r_tl.center = (380, 336)
+
         self.blit(self.continue_image, pygame.Rect((0, 0), self.size))
         self.blit(self.text_continue_timer, r_tct)
+        self.blit(self.text_lives, r_tl)
 
     def handle_inputs(self, event):
         if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
             self.lives -= 1
-            self.callback(True)
+            self.will_continue = True
+            self._redraw()
         elif event.type == pygame.KEYUP:
             # Ignore key up events
             pass
@@ -293,8 +313,6 @@ class ContinueScreen(pygame.surface.Surface):
 class GameOver(pygame.surface.Surface):
     """Game over!"""
 
-    sound = None
-
     image_path = os.path.join("res", "cinematic", "gameover.png")
 
     timer = 240
@@ -303,6 +321,7 @@ class GameOver(pygame.surface.Surface):
         pygame.surface.Surface.__init__(self, size)
         self.image = pygame.image.load(self.image_path)
         self.blit(self.image, pygame.Rect((0, 0), size))
+        music_handler.play_track("game_over")
 
     def update(self):
         self.timer -= 1

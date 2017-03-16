@@ -11,7 +11,7 @@ from scanlines import Scanlines
 from startscreen import StartScreen
 from sp_tourney import SinglePlayerTourney
 from hud_global import GlobalHUD
-import events
+import music_handler
 
 from settings import DISP_WIDTH, DISP_HEIGHT, DEBUG, WINDOWED
 
@@ -108,13 +108,13 @@ class ZeroGravitySoccer():
                     self.sp_manager = SinglePlayerTourney(self.window_unscaled.get_size())
                     self.state = SINGLEPLAYER
                 elif event.mode == "vs_ai":
-                    self.start_game(event.map, vs_ai = True)
+                    self.start_game(event.map, vs_ai = True, handle_music = event.music)
                     self.state = GAME
                 elif event.mode == "vs_local":
-                    self.start_game(event.map)
+                    self.start_game(event.map, handle_music = event.music)
                     self.state = GAME
                 else:
-                    self.start_game(event.map)
+                    self.start_game(event.map, handle_music = event.music)
                     self.state = GAME
 
             elif event.type == events.END_GAME:                 # End a game
@@ -140,9 +140,10 @@ class ZeroGravitySoccer():
             pass
 
         self.startscreen.reset()
+        music_handler.fadeout()
         self.state = MENU
 
-    def start_game(self, map, vs_ai = False):
+    def start_game(self, map, vs_ai = False, handle_music = False):
         self.splitscreen = not vs_ai
         # Create the map
         map_path = os.path.join("res", map)
@@ -194,6 +195,8 @@ class ZeroGravitySoccer():
         del Map.current_map
         del self.game_disp
         del self.global_hud
+
+        music_handler.fadeout()
 
     def loop(self):
         """Primary game loop."""

@@ -161,7 +161,8 @@ class StartScreen(pygame.surface.Surface):
         pygame.event.post(pygame.event.Event(events.START_GAME, {
             "called_by": self,
             "mode": "vs_local",
-            "map": "soccer_arcade1_tilemap.png"
+            "map": "soccer_arcade1_tilemap.png",
+            "music": True
         }))
 
     def quit_game(self):
