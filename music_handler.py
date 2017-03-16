@@ -14,9 +14,9 @@ tracks = {
         music_file("ozzed__shell_shock_shake.ogg"),
         music_file("ozzed__human_factory_reset.ogg")
     ],
-    "bracket":        music_file("kulor__oceanfloor.ogg"),
+    "bracket":       music_file("kulor__oceanfloor.ogg"),
     "continue":      music_file("chiptune__under_my_bed.ogg"),
-    "game_over":     music_file("lose.wav")
+    "game_over":     music_file("gameover.wav")
 }
 
 def play_track(name):
