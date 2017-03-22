@@ -34,7 +34,7 @@ class ZeroGravitySoccer():
         # small hack: if windowed is not comfortable at max res,
         # then override option and go straight to full-screen mode
         res_x, res_y = pygame.display.list_modes()[0]
-        if res_x < DISP_WIDTH*1.6 or res_y < DISP_HEIGHT*1.6:
+        if res_x < DISP_WIDTH*2.2 or res_y < DISP_HEIGHT*2.2:
             print("Windowed mode would barely fit in this monitor. Forcing full screen.")
             global WINDOWED
             WINDOWED = False
